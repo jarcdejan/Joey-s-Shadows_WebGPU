@@ -1,0 +1,692 @@
+{
+    "asset" : {
+        "generator" : "Khronos glTF Blender I/O v3.2.43",
+        "version" : "2.0"
+    },
+    "scene" : 0,
+    "scenes" : [
+        {
+            "extras" : {
+                "pdt_pg" : {},
+                "archimesh_gl_measure" : 1
+            },
+            "name" : "Scene",
+            "nodes" : [
+                0,
+                1,
+                2,
+                3,
+                4
+            ]
+        }
+    ],
+    "nodes" : [
+        {
+            "extras" : {
+                "RoomGenerator" : [
+                    {
+                        "walls" : [
+                            {
+                                "glpoint_a" : [
+                                    5.170000076293945,
+                                    0.0,
+                                    0.0
+                                ],
+                                "glpoint_b" : [
+                                    0.0,
+                                    0.0,
+                                    0.0
+                                ],
+                                "w" : 5.170000076293945,
+                                "a" : 0
+                            },
+                            {
+                                "r" : 90.0,
+                                "glpoint_a" : [
+                                    5.170000076293945,
+                                    -7.789999961853027,
+                                    0.0
+                                ],
+                                "glpoint_b" : [
+                                    5.170000076293945,
+                                    0.0,
+                                    0.0
+                                ],
+                                "w" : -7.789999961853027
+                            },
+                            {
+                                "glpoint_a" : [
+                                    -0.009999275207519531,
+                                    -7.789999961853027,
+                                    0.0
+                                ],
+                                "glpoint_b" : [
+                                    5.170000076293945,
+                                    -7.789999961853027,
+                                    0.0
+                                ],
+                                "w" : -5.179999351501465
+                            },
+                            {
+                                "r" : 90.0,
+                                "glpoint_a" : [
+                                    -0.009999275207519531,
+                                    -0.010000228881835938,
+                                    0.0
+                                ],
+                                "glpoint_b" : [
+                                    -0.009999275207519531,
+                                    -7.789999961853027,
+                                    0.0
+                                ],
+                                "w" : 7.779999732971191
+                            },
+                            {}
+                        ],
+                        "wall_width" : 0.08999999612569809,
+                        "wall_num" : 3,
+                        "base_height" : 0.17999999225139618,
+                        "base_width" : 0.10999999940395355,
+                        "merge" : 1,
+                        "baseboard" : 0,
+                        "floor" : 1,
+                        "ceiling" : 0
+                    }
+                ]
+            },
+            "mesh" : 0,
+            "name" : "Room",
+            "scale" : [
+                6.235279083251953,
+                6.235279083251953,
+                6.235279083251953
+            ],
+            "translation" : [
+                -17.050703048706055,
+                0,
+                -27.721172332763672
+            ]
+        },
+        {
+            "extras" : {
+                "RoomGenerator" : [
+                    {
+                        "walls" : [
+                            {
+                                "glpoint_a" : [
+                                    1.8700001239776611,
+                                    0.0,
+                                    0.0
+                                ],
+                                "glpoint_b" : [
+                                    0.0,
+                                    0.0,
+                                    0.0
+                                ],
+                                "w" : 1.8700001239776611
+                            },
+                            {
+                                "r" : 90.0,
+                                "glpoint_a" : [
+                                    1.8700001239776611,
+                                    1.2999999523162842,
+                                    0.0
+                                ],
+                                "glpoint_b" : [
+                                    1.8700001239776611,
+                                    0.0,
+                                    0.0
+                                ],
+                                "w" : 1.2999999523162842
+                            },
+                            {
+                                "glpoint_a" : [
+                                    3.0500001907348633,
+                                    1.2999999523162842,
+                                    0.0
+                                ],
+                                "glpoint_b" : [
+                                    1.8700001239776611,
+                                    1.2999999523162842,
+                                    0.0
+                                ],
+                                "w" : 1.1799999475479126
+                            },
+                            {
+                                "r" : 90.0,
+                                "glpoint_a" : [
+                                    3.0500001907348633,
+                                    2.5699996948242188,
+                                    0.0
+                                ],
+                                "glpoint_b" : [
+                                    3.0500001907348633,
+                                    1.2999999523162842,
+                                    0.0
+                                ],
+                                "w" : 1.2699997425079346
+                            },
+                            {}
+                        ],
+                        "wall_num" : 4,
+                        "wall_width" : 0.08999999612569809,
+                        "base_width" : 0.10999999940395355,
+                        "merge" : 0,
+                        "baseboard" : 0
+                    }
+                ]
+            },
+            "mesh" : 1,
+            "name" : "Room.001",
+            "scale" : [
+                6.216940879821777,
+                6.216940879821777,
+                6.216940879821777
+            ],
+            "translation" : [
+                -16.971105575561523,
+                0,
+                -11.820968627929688
+            ]
+        },
+        {
+            "extras" : {
+                "RoomGenerator" : [
+                    {
+                        "walls" : [
+                            {
+                                "glpoint_a" : [
+                                    1.8999996185302734,
+                                    0.0,
+                                    0.0
+                                ],
+                                "glpoint_b" : [
+                                    0.0,
+                                    0.0,
+                                    0.0
+                                ],
+                                "w" : 1.8999996185302734
+                            },
+                            {
+                                "r" : 90.0,
+                                "glpoint_a" : [
+                                    1.8999996185302734,
+                                    1.8100001811981201,
+                                    0.0
+                                ],
+                                "glpoint_b" : [
+                                    1.8999996185302734,
+                                    0.0,
+                                    0.0
+                                ],
+                                "w" : 1.8100001811981201
+                            },
+                            {}
+                        ],
+                        "wall_width" : 0.08999999612569809,
+                        "wall_num" : 2,
+                        "shell" : 0,
+                        "baseboard" : 0,
+                        "base_width" : 0.10999999940395355
+                    }
+                ]
+            },
+            "mesh" : 2,
+            "name" : "Room.002",
+            "scale" : [
+                6.19745397567749,
+                6.19745397567749,
+                6.19745397567749
+            ],
+            "translation" : [
+                -17.088172912597656,
+                0,
+                -0.31305694580078125
+            ]
+        },
+        {
+            "extras" : {
+                "RoomGenerator" : [
+                    {
+                        "walls" : [
+                            {
+                                "glpoint_a" : [
+                                    1.3899998664855957,
+                                    0.0,
+                                    0.0
+                                ],
+                                "glpoint_b" : [
+                                    0.0,
+                                    0.0,
+                                    0.0
+                                ],
+                                "w" : 1.3899998664855957
+                            },
+                            {
+                                "r" : 90.0,
+                                "glpoint_a" : [
+                                    1.3899998664855957,
+                                    -1.3700000047683716,
+                                    0.0
+                                ],
+                                "glpoint_b" : [
+                                    1.3899998664855957,
+                                    0.0,
+                                    0.0
+                                ],
+                                "w" : -1.3700000047683716
+                            },
+                            {
+                                "glpoint_a" : [
+                                    -0.009999990463256836,
+                                    -1.3700000047683716,
+                                    0.0
+                                ],
+                                "glpoint_b" : [
+                                    1.3899998664855957,
+                                    -1.3700000047683716,
+                                    0.0
+                                ],
+                                "w" : -1.3999998569488525
+                            },
+                            {}
+                        ],
+                        "baseboard" : 0,
+                        "wall_width" : 0.08999999612569809,
+                        "wall_num" : 3
+                    }
+                ]
+            },
+            "mesh" : 3,
+            "name" : "Room.004",
+            "rotation" : [
+                0,
+                -0.9999939203262329,
+                0,
+                0.0034904845524579287
+            ],
+            "scale" : [
+                6.180553436279297,
+                6.180553436279297,
+                6.180553436279297
+            ],
+            "translation" : [
+                15.185689926147461,
+                0,
+                -0.757720947265625
+            ]
+        },
+        {
+            "mesh" : 4,
+            "name" : "Plane.001",
+            "scale" : [
+                16.4520263671875,
+                16.4520263671875,
+                24.831636428833008
+            ],
+            "translation" : [
+                -0.9736332297325134,
+                0,
+                -3.3381710052490234
+            ]
+        }
+    ],
+    "materials" : [
+        {
+            "doubleSided" : true,
+            "name" : "Wall_material",
+            "pbrMetallicRoughness" : {}
+        }
+    ],
+    "meshes" : [
+        {
+            "name" : "temp",
+            "primitives" : [
+                {
+                    "attributes" : {
+                        "POSITION" : 0,
+                        "NORMAL" : 1,
+                        "TEXCOORD_0" : 2
+                    },
+                    "indices" : 3,
+                    "material" : 0
+                }
+            ]
+        },
+        {
+            "name" : "Room.001",
+            "primitives" : [
+                {
+                    "attributes" : {
+                        "POSITION" : 4,
+                        "NORMAL" : 5,
+                        "TEXCOORD_0" : 6
+                    },
+                    "indices" : 7,
+                    "material" : 0
+                }
+            ]
+        },
+        {
+            "name" : "Room.002",
+            "primitives" : [
+                {
+                    "attributes" : {
+                        "POSITION" : 8,
+                        "NORMAL" : 9,
+                        "TEXCOORD_0" : 10
+                    },
+                    "indices" : 11,
+                    "material" : 0
+                }
+            ]
+        },
+        {
+            "name" : "Room.004",
+            "primitives" : [
+                {
+                    "attributes" : {
+                        "POSITION" : 12,
+                        "NORMAL" : 13,
+                        "TEXCOORD_0" : 14
+                    },
+                    "indices" : 15,
+                    "material" : 0
+                }
+            ]
+        },
+        {
+            "name" : "Plane.001",
+            "primitives" : [
+                {
+                    "attributes" : {
+                        "POSITION" : 16,
+                        "NORMAL" : 17,
+                        "TEXCOORD_0" : 18
+                    },
+                    "indices" : 19
+                }
+            ]
+        }
+    ],
+    "accessors" : [
+        {
+            "bufferView" : 0,
+            "componentType" : 5126,
+            "count" : 16,
+            "max" : [
+                5.170000076293945,
+                2.4000000953674316,
+                7.789999961853027
+            ],
+            "min" : [
+                -0.009999275207519531,
+                0,
+                0
+            ],
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 1,
+            "componentType" : 5126,
+            "count" : 16,
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 2,
+            "componentType" : 5126,
+            "count" : 16,
+            "type" : "VEC2"
+        },
+        {
+            "bufferView" : 3,
+            "componentType" : 5123,
+            "count" : 24,
+            "type" : "SCALAR"
+        },
+        {
+            "bufferView" : 4,
+            "componentType" : 5126,
+            "count" : 16,
+            "max" : [
+                3.0500001907348633,
+                2.4000000953674316,
+                0
+            ],
+            "min" : [
+                0,
+                0,
+                -2.5699996948242188
+            ],
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 5,
+            "componentType" : 5126,
+            "count" : 16,
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 6,
+            "componentType" : 5126,
+            "count" : 16,
+            "type" : "VEC2"
+        },
+        {
+            "bufferView" : 7,
+            "componentType" : 5123,
+            "count" : 24,
+            "type" : "SCALAR"
+        },
+        {
+            "bufferView" : 8,
+            "componentType" : 5126,
+            "count" : 8,
+            "max" : [
+                1.8999996185302734,
+                2.4000000953674316,
+                0
+            ],
+            "min" : [
+                0,
+                0,
+                -1.8100001811981201
+            ],
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 9,
+            "componentType" : 5126,
+            "count" : 8,
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 10,
+            "componentType" : 5126,
+            "count" : 8,
+            "type" : "VEC2"
+        },
+        {
+            "bufferView" : 11,
+            "componentType" : 5123,
+            "count" : 12,
+            "type" : "SCALAR"
+        },
+        {
+            "bufferView" : 12,
+            "componentType" : 5126,
+            "count" : 12,
+            "max" : [
+                1.3899998664855957,
+                2.4000000953674316,
+                1.3700000047683716
+            ],
+            "min" : [
+                -0.009999990463256836,
+                0,
+                0
+            ],
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 13,
+            "componentType" : 5126,
+            "count" : 12,
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 14,
+            "componentType" : 5126,
+            "count" : 12,
+            "type" : "VEC2"
+        },
+        {
+            "bufferView" : 15,
+            "componentType" : 5123,
+            "count" : 18,
+            "type" : "SCALAR"
+        },
+        {
+            "bufferView" : 16,
+            "componentType" : 5126,
+            "count" : 4,
+            "max" : [
+                1,
+                0,
+                1
+            ],
+            "min" : [
+                -1,
+                0,
+                -1
+            ],
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 17,
+            "componentType" : 5126,
+            "count" : 4,
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 18,
+            "componentType" : 5126,
+            "count" : 4,
+            "type" : "VEC2"
+        },
+        {
+            "bufferView" : 19,
+            "componentType" : 5123,
+            "count" : 6,
+            "type" : "SCALAR"
+        }
+    ],
+    "bufferViews" : [
+        {
+            "buffer" : 0,
+            "byteLength" : 192,
+            "byteOffset" : 0
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 192,
+            "byteOffset" : 192
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 128,
+            "byteOffset" : 384
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 48,
+            "byteOffset" : 512
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 192,
+            "byteOffset" : 560
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 192,
+            "byteOffset" : 752
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 128,
+            "byteOffset" : 944
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 48,
+            "byteOffset" : 1072
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 96,
+            "byteOffset" : 1120
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 96,
+            "byteOffset" : 1216
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 64,
+            "byteOffset" : 1312
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 24,
+            "byteOffset" : 1376
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 144,
+            "byteOffset" : 1400
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 144,
+            "byteOffset" : 1544
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 96,
+            "byteOffset" : 1688
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 36,
+            "byteOffset" : 1784
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 48,
+            "byteOffset" : 1820
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 48,
+            "byteOffset" : 1868
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 32,
+            "byteOffset" : 1916
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 12,
+            "byteOffset" : 1948
+        }
+    ],
+    "buffers" : [
+        {
+            "byteLength" : 1960,
+            "uri" : "data:application/octet-stream;base64,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"
+        }
+    ]
+}
