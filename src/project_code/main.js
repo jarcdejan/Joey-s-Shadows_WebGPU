@@ -7,6 +7,13 @@ import { FirstPersonController } from '../engine/controllers/FirstPersonControll
 
 import { Camera, Model } from '../engine/core.js';
 
+import {
+    calculateAxisAlignedBoundingBox,
+    mergeAxisAlignedBoundingBoxes,
+} from '../engine/core/MeshUtils.js';
+
+import { Physics } from '../engine/Physics.js';
+
 const canvas = document.querySelector('canvas');
 const renderer = new UnlitRenderer(canvas);
 await renderer.initialize();
@@ -15,10 +22,37 @@ const loader = new GLTFLoader();
 await loader.load('../../res/scene/scene.gltf');
 
 const scene = loader.loadScene(loader.defaultScene);
-console.log(scene)
-
 const camera = loader.loadNode('Camera');
+
 camera.addComponent(new FirstPersonController(camera, canvas));
+camera.isDynamic = true;
+camera.aabb = {
+    min: [-0.2, -0.2, -0.2],
+    max: [0.2, 0.2, 0.2],
+};
+
+loader.loadNode('Box.000').isStatic = true;
+loader.loadNode('Box.001').isStatic = true;
+loader.loadNode('Box.002').isStatic = true;
+loader.loadNode('Box.003').isStatic = true;
+loader.loadNode('Box.004').isStatic = true;
+loader.loadNode('Box.005').isStatic = true;
+loader.loadNode('Wall.000').isStatic = true;
+loader.loadNode('Wall.001').isStatic = true;
+loader.loadNode('Wall.002').isStatic = true;
+loader.loadNode('Wall.003').isStatic = true;
+
+const physics = new Physics(scene);
+
+scene.traverse(node => {
+    const model = node.getComponentOfType(Model);
+    if (!model) {
+        return;
+    }
+
+    const boxes = model.primitives.map(primitive => calculateAxisAlignedBoundingBox(primitive.mesh));
+    node.aabb = mergeAxisAlignedBoundingBoxes(boxes);
+});
 
 function update(t, dt) {
     scene.traverse(node => {
@@ -26,6 +60,8 @@ function update(t, dt) {
             component.update?.(t, dt);
         }
     });
+
+    physics.update(t, dt);
 }
 
 function render() {
