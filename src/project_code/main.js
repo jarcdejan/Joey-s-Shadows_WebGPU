@@ -7,6 +7,10 @@ import { Renderer } from './Renderer.js';
 import { FirstPersonController } from '../engine/controllers/FirstPersonController.js';
 
 import { Light } from './Light.js';
+import { SoundListener } from './SoundListener.js'
+import { RepeatingSoundEmitter } from './RepeatingSoundEmitter.js';
+import { TriggerSoundEmitter } from './TriggerSoundEmitter.js';
+import { Tripwire } from './Tripwire.js';
 
 import {
     Camera,
@@ -18,6 +22,7 @@ import {
     Texture,
     Transform,
 } from '../engine/core.js';
+import { initScene } from './initScene.js';
 
 const canvas = document.querySelector('canvas');
 const renderer = new Renderer(canvas);
@@ -27,7 +32,6 @@ const loader = new GLTFLoader();
 await loader.load('../../res/scene/scene.gltf');
 
 const scene = loader.loadScene(loader.defaultScene);
-console.log(scene)
 
 const camera = loader.loadNode('Camera');
 camera.addComponent(new FirstPersonController(camera, canvas));
@@ -38,6 +42,11 @@ light.addComponent(new Transform({
 }));
 light.addComponent(new Light());
 camera.addChild(light);
+
+await initScene(scene, camera)
+
+console.log(scene)
+
 
 function update(t, dt) {
     scene.traverse(node => {
