@@ -1,7 +1,7 @@
 import { vec3, mat4 } from '../../../lib/gl-matrix-module.js';
 import { getGlobalModelMatrix } from '../engine/core/SceneUtils.js';
 
-export class RepeatingSoundEmitter {
+export class WalkingSound {
 
     constructor({
         node,
@@ -11,13 +11,12 @@ export class RepeatingSoundEmitter {
         maxDistance = 100,
         refDistance = 1,
         rollOff = 10,
-        audioBuffer,
-        cooldown = 30 * 1000,
+        audioBufferList,
         gain = 1,
+        stepDistance = 2,
     } = {}) {
 
-        this.node = node
-        this.cooldown = cooldown
+        this.node = node;
 
         this.panner = new PannerNode(audioCtx, {
             panningModel,
@@ -35,14 +34,15 @@ export class RepeatingSoundEmitter {
 
         this.gainVal = gain;
 
-        this.gain = new GainNode(audioCtx, {gain: this.gainVal})
+        this.gain = new GainNode(audioCtx, {gain: this.gainVal});
 
-        this.audioBuffer = audioBuffer
-        this.audioCtx = audioCtx
+        this.audioBufferList = audioBufferList;
+        this.audioCtx = audioCtx;
 
-        this.playing = false
-        this.startTime = 0
-        this.enabled = true
+        this.stepDistance = stepDistance;
+        this.distance = 0;
+        this.lastPosition = mat4.getTranslation(vec3.create(), getGlobalModelMatrix(this.node));
+        this.audioIndex = 0;
     }
 
     update() {
@@ -52,19 +52,21 @@ export class RepeatingSoundEmitter {
         this.panner.positionY.value = position[1];
         this.panner.positionZ.value = position[2];
 
-        const d = new Date();
-        let time = d.getTime();
+        this.distance += Math.sqrt(Math.pow(position[0]-this.lastPosition[0], 2) + Math.pow(position[2]-this.lastPosition[2], 2));
+        this.lastPosition = position;
 
-        if(this.playing == false && navigator.userActivation.isActive && time - this.startTime > this.cooldown && this.enabled){
+        if(navigator.userActivation.isActive && this.distance >= this.stepDistance){
+
+            this.distance = 0;
             let source = this.audioCtx.createBufferSource();
-            source.buffer = this.audioBuffer;
+            source.buffer = this.audioBufferList[this.audioIndex];
+
+            this.audioIndex += 1;
+            if(this.audioIndex >= this.audioBufferList.length)
+                this.audioIndex = 0;
+
             source.connect(this.panner).connect(this.gain).connect(this.audioCtx.destination);
             source.start();
-            this.playing = true;
-            this.startTime = d.getTime();;
-            source.addEventListener("ended", e =>{
-                this.playing = false;
-            });
         }
     }
 

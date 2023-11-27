@@ -1,12 +1,5 @@
-import { vec3, vec4, mat3, mat4 } from '../../../lib/gl-matrix-module.js';
-import {
-    getLocalModelMatrix,
-    getGlobalModelMatrix,
-    getGlobalViewMatrix,
-    getProjectionMatrix,
-    getModels,
-    getGlobalRotation,
-} from '../engine/core/SceneUtils.js';
+import { vec3, mat4 } from '../../../lib/gl-matrix-module.js';
+import { getGlobalModelMatrix } from '../engine/core/SceneUtils.js';
 
 export class TriggerSoundEmitter {
 
