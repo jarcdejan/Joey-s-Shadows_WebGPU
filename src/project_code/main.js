@@ -14,6 +14,27 @@ import {
 
 import { Physics } from '../engine/Physics.js';
 
+import { Renderer } from './Renderer.js';
+import { FirstPersonController } from '../engine/controllers/FirstPersonController.js';
+
+import { Light } from './Light.js';
+import { SoundListener } from './SoundListener.js'
+import { RepeatingSoundEmitter } from './RepeatingSoundEmitter.js';
+import { TriggerSoundEmitter } from './TriggerSoundEmitter.js';
+import { Tripwire } from './Tripwire.js';
+
+import {
+    Camera,
+    Material,
+    Model,
+    Node,
+    Primitive,
+    Sampler,
+    Texture,
+    Transform,
+} from '../engine/core.js';
+import { initScene } from './initScene.js';
+
 const canvas = document.querySelector('canvas');
 const renderer = new UnlitRenderer(canvas);
 await renderer.initialize();
@@ -45,6 +66,21 @@ scene.traverse(node => {
     node.isStatic = true;
 });
 
+
+const light = new Node();
+light.addComponent(new Transform({
+    translation: [0.8,-0.8,0],
+}));
+light.addComponent(new Light({
+    domElement: canvas,
+}));
+camera.addChild(light);
+
+await initScene(scene, camera)
+
+console.log(scene)
+
+
 function update(t, dt) {
     scene.traverse(node => {
         for (const component of node.components) {
@@ -56,7 +92,7 @@ function update(t, dt) {
 }
 
 function render() {
-    renderer.render(scene, camera);
+    renderer.render(scene, camera, light);
 }
 
 function resize({ displaySize: { width, height }}) {

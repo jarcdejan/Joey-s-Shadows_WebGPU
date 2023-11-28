@@ -156,7 +156,7 @@ export class UnlitRenderer extends BaseRenderer {
             colorAttachments: [
                 {
                     view: this.context.getCurrentTexture().createView(),
-                    clearValue: [1, 1, 1, 1],
+                    clearValue: [0, 0, 0, 1],
                     loadOp: 'clear',
                     storeOp: 'store',
                 },
