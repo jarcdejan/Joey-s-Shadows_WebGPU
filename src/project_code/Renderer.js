@@ -317,7 +317,7 @@ export class Renderer extends BaseRenderer {
         const lightComponent = light.getComponentOfType(Light);
         const lightViewMatrix = getGlobalViewMatrix(light);
         const lightProjectionMatrix = lightComponent.perspectiveMatrix;
-        const lightColor = vec3.scale(vec3.create(), lightComponent.color, lightComponent.intensity / 255);
+        const lightColor = vec3.scale(vec3.create(), lightComponent.color, 1 / 255);
         const lightPosition = mat4.getTranslation(vec3.create(), getGlobalModelMatrix(light));
         let vecDir = vec4.set(vec4.create(),0,0,-1,1)
         let lightDirection = vec4.transformQuat(vec4.create(), vecDir, getGlobalRotation(light))
@@ -330,7 +330,7 @@ export class Renderer extends BaseRenderer {
         this.device.queue.writeBuffer(lightUniformBuffer, 128+16, lightPosition);
         this.device.queue.writeBuffer(lightUniformBuffer, 128+32, lightAttenuation);
         this.device.queue.writeBuffer(lightUniformBuffer, 128+48, lightDirection);
-        this.device.queue.writeBuffer(lightUniformBuffer, 128+60, new Float32Array([lightComponent.ambient,lightComponent.fi]));
+        this.device.queue.writeBuffer(lightUniformBuffer, 128+60, new Float32Array([lightComponent.intensity, lightComponent.ambient, lightComponent.fi]));
         this.shadowPass.setBindGroup(0, lightBindGroup);
 
         this.renderNode_shadow(scene);
@@ -370,7 +370,7 @@ export class Renderer extends BaseRenderer {
         this.device.queue.writeBuffer(lightUniformBuffer, 128+16, lightPosition);
         this.device.queue.writeBuffer(lightUniformBuffer, 128+32, lightAttenuation);
         this.device.queue.writeBuffer(lightUniformBuffer, 128+48, lightDirection);
-        this.device.queue.writeBuffer(lightUniformBuffer, 128+60, new Float32Array([lightComponent.ambient,lightComponent.fi]));
+        this.device.queue.writeBuffer(lightUniformBuffer, 128+60, new Float32Array([lightComponent.intensity, lightComponent.ambient, lightComponent.fi]));
         this.renderPass.setBindGroup(1, lightBindGroup);
 
         this.renderNode(scene);

@@ -36,6 +36,7 @@ struct LightUniforms {
     position : vec3f,
     attenuation : vec3f,
     direction : vec3f,
+    intensity : f32,
     ambient : f32,
     fi : f32,
 }
@@ -103,9 +104,9 @@ fn fragment(input : FragmentInput) -> FragmentOutput {
         cl = light.color * exp(-pow( 1.25/light.fi * acos(dot(-L,D)), 8));
     }
 
-    let diffuseLight = lambert * attenuation * cl;
-    let specularLight = phong * attenuation * cl;
-    let ambientLight = light.ambient * light.color;
+    let diffuseLight = lambert * attenuation * cl * light.intensity;
+    let specularLight = phong * attenuation * cl * light.intensity;
+    let ambientLight = light.ambient * light.color / d;
 
 
     var shadowXY = vec2(input.shadowPos.x/input.shadowPos.w * 0.5 + 0.5, input.shadowPos.y/input.shadowPos.w * -0.5 + 0.5);

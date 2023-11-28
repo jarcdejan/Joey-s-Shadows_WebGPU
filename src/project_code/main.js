@@ -40,7 +40,9 @@ const light = new Node();
 light.addComponent(new Transform({
     translation: [0.8,-0.8,0],
 }));
-light.addComponent(new Light());
+light.addComponent(new Light({
+    domElement: canvas,
+}));
 camera.addChild(light);
 
 await initScene(scene, camera)
