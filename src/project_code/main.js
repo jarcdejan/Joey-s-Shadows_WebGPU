@@ -19,7 +19,7 @@ const renderer = new UnlitRenderer(canvas);
 await renderer.initialize();
 
 const loader = new GLTFLoader();
-await loader.load('../../res/scene/test.gltf');
+await loader.load('../../res/scene/test3.gltf');
 
 const scene = loader.loadScene(loader.defaultScene);
 const camera = loader.loadNode('Camera');
