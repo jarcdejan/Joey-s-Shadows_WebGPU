@@ -358,6 +358,9 @@ export class Renderer extends BaseRenderer {
         const viewMatrix = getGlobalViewMatrix(camera);
         const projectionMatrix = getProjectionMatrix(camera);
         const cameraPosition = mat4.getTranslation(vec3.create(), getGlobalModelMatrix(camera));
+
+        console.log(cameraPosition);
+
         const { cameraUniformBuffer, cameraBindGroup } = this.prepareCamera(cameraComponent);
         this.device.queue.writeBuffer(cameraUniformBuffer, 0, viewMatrix);
         this.device.queue.writeBuffer(cameraUniformBuffer, 64, projectionMatrix);

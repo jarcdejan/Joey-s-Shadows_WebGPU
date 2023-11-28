@@ -64,7 +64,6 @@ export async function initScene(scene, camera) {
         tripwireNode: tripwireNode,
         playerNode: camera,
         triggerNodes: [soundNode1],
-        repeat: false,
     }));
     scene.addChild(tripwireNode);
 

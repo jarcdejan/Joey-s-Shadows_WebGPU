@@ -5,8 +5,6 @@ import { GLTFLoader } from '../engine/loaders/GLTFLoader.js';
 import { UnlitRenderer } from '../engine/renderers/UnlitRenderer.js';
 import { FirstPersonController } from '../engine/controllers/FirstPersonController.js';
 
-import { Camera, Model } from '../engine/core.js';
-
 import {
     calculateAxisAlignedBoundingBox,
     mergeAxisAlignedBoundingBoxes,
@@ -15,7 +13,6 @@ import {
 import { Physics } from '../engine/Physics.js';
 
 import { Renderer } from './Renderer.js';
-import { FirstPersonController } from '../engine/controllers/FirstPersonController.js';
 
 import { Light } from './Light.js';
 import { SoundListener } from './SoundListener.js'
@@ -36,7 +33,7 @@ import {
 import { initScene } from './initScene.js';
 
 const canvas = document.querySelector('canvas');
-const renderer = new UnlitRenderer(canvas);
+const renderer = new Renderer(canvas);
 await renderer.initialize();
 
 const loader = new GLTFLoader();
@@ -49,7 +46,7 @@ camera.addComponent(new FirstPersonController(camera, canvas));
 camera.isDynamic = true;
 camera.aabb = {
     min: [-0.2, -0.2, -0.2],
-    max: [0.2, 0.2, 0.2],
+    max: [0.4, 0.2, 0.2],
 };
 
 const physics = new Physics(scene);
@@ -69,7 +66,7 @@ scene.traverse(node => {
 
 const light = new Node();
 light.addComponent(new Transform({
-    translation: [0.8,-0.8,0],
+    translation: [0.4,-0.8,0],
 }));
 light.addComponent(new Light({
     domElement: canvas,
@@ -77,8 +74,6 @@ light.addComponent(new Light({
 camera.addChild(light);
 
 await initScene(scene, camera)
-
-console.log(scene)
 
 
 function update(t, dt) {
