@@ -75,7 +75,7 @@ export class Light {
 
         let time = d.getTime();
 
-        if(this.on)
+        if(this.on && time - this.previousTime < 1000)
             this.percentage -= (time - this.previousTime) / workingTime
 
         this.previousTime = time;
