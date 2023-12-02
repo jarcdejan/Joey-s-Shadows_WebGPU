@@ -112,7 +112,6 @@ export class Renderer extends BaseRenderer {
 
     constructor(canvas) {
         super(canvas);
-        this.perFragment = true;
     }
 
     async initialize() {
@@ -359,7 +358,7 @@ export class Renderer extends BaseRenderer {
         const projectionMatrix = getProjectionMatrix(camera);
         const cameraPosition = mat4.getTranslation(vec3.create(), getGlobalModelMatrix(camera));
 
-        console.log(cameraPosition);
+        //console.log(cameraPosition);
 
         const { cameraUniformBuffer, cameraBindGroup } = this.prepareCamera(cameraComponent);
         this.device.queue.writeBuffer(cameraUniformBuffer, 0, viewMatrix);

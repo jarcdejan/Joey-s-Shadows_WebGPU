@@ -9,7 +9,7 @@ import {
     Transform,
 } from '../engine/core.js';
 
-export async function initScene(scene, camera) {
+export async function initScene(scene, camera, light) {
 
     const AudioContext = window.AudioContext || window.webkitAudioContext;
     const audioCtx = new AudioContext();
@@ -23,6 +23,18 @@ export async function initScene(scene, camera) {
     }))
     listenerNode.addComponent(new Transform());
     camera.addChild(listenerNode);
+
+
+    const soundFileSwitch = await fetch('../../res/sounds/switch.wav');
+    const arrayBufferSwitch = await soundFileSwitch.arrayBuffer();
+    const audioBufferSwitch = await audioCtx.decodeAudioData(arrayBufferSwitch);
+
+    light.addComponent(new TriggerSoundEmitter({
+        node: light,
+        audioCtx,
+        audioBuffer: audioBufferSwitch,
+        gain: 0.5,
+    }))
 
 
     const soundFile = await fetch('../../res/sounds/whispering.mp3');
@@ -95,4 +107,5 @@ export async function initScene(scene, camera) {
         gain: 0.4,
     }));
     camera.addChild(walkingSoundNode)
+
 }

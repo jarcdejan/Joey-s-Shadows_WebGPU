@@ -15,10 +15,9 @@ import { Physics } from '../engine/Physics.js';
 import { Renderer } from './Renderer.js';
 
 import { Light } from './Light.js';
-import { SoundListener } from './SoundListener.js'
-import { RepeatingSoundEmitter } from './RepeatingSoundEmitter.js';
-import { TriggerSoundEmitter } from './TriggerSoundEmitter.js';
-import { Tripwire } from './Tripwire.js';
+
+import { UILayoutLoader } from './UILayoutLoader.js';
+import { UIRenderer } from './UIRenderer.js';
 
 import {
     Camera,
@@ -32,7 +31,7 @@ import {
 } from '../engine/core.js';
 import { initScene } from './initScene.js';
 
-const canvas = document.querySelector('canvas');
+const canvas = document.getElementById('webgpuCanvas');
 const renderer = new Renderer(canvas);
 await renderer.initialize();
 
@@ -70,11 +69,17 @@ light.addComponent(new Transform({
 }));
 light.addComponent(new Light({
     domElement: canvas,
+    node: light,
 }));
 camera.addChild(light);
 
-await initScene(scene, camera)
+await initScene(scene, camera, light);
 
+const canvas2d = document.getElementById("2dCanvas")
+const uiLayoutLoader = new UILayoutLoader(canvas, light.getComponentOfType(Light));
+const uiLayout = await uiLayoutLoader.getLayout();
+const uiRenderer = new UIRenderer(canvas2d);
+uiRenderer.init();
 
 function update(t, dt) {
     scene.traverse(node => {
@@ -84,10 +89,15 @@ function update(t, dt) {
     });
 
     physics.update(t, dt);
+
+    for(const element of uiLayout){
+        element?.update();
+    }
 }
 
 function render() {
     renderer.render(scene, camera, light);
+    uiRenderer.render(uiLayout);
 }
 
 function resize({ displaySize: { width, height }}) {
