@@ -30,6 +30,8 @@ import {
     Transform,
 } from '../engine/core.js';
 import { initScene } from './initScene.js';
+import { Pause } from './pause.js';
+import { PauseLayoutLoader } from './PauseLayoutLoader.js';
 
 const canvas = document.getElementById('webgpuCanvas');
 const renderer = new Renderer(canvas);
@@ -75,13 +77,24 @@ camera.addChild(light);
 
 await initScene(scene, camera, light);
 
+
 const canvas2d = document.getElementById("2dCanvas")
 const uiLayoutLoader = new UILayoutLoader(canvas, light.getComponentOfType(Light));
 const uiLayout = await uiLayoutLoader.getLayout();
+const pauseLayoutLoader = new PauseLayoutLoader(canvas);
+const pauseLayout = await pauseLayoutLoader.getLayout();
 const uiRenderer = new UIRenderer(canvas2d);
 uiRenderer.init();
 
+
+let pauseCheck = new Pause(canvas);
+
+
 function update(t, dt) {
+
+    if(pauseCheck.paused)
+        return;
+
     scene.traverse(node => {
         for (const component of node.components) {
             component.update?.(t, dt);
@@ -96,13 +109,24 @@ function update(t, dt) {
 }
 
 function render() {
-    renderer.render(scene, camera, light);
-    uiRenderer.render(uiLayout);
+    if(!pauseCheck.paused){
+        renderer.render(scene, camera, light);
+        uiRenderer.render(uiLayout);
+    }
+    else{
+        uiRenderer.render(pauseLayout);
+    }
 }
 
 function resize({ displaySize: { width, height }}) {
     camera.getComponentOfType(Camera).aspect = width / height;
 }
+
+window.addEventListener("resize", (event) => {
+    canvas2d.width = window.innerWidth;
+    canvas2d.height = window.innerHeight;
+    console.log("aaa")
+});
 
 new ResizeSystem({ canvas, resize }).start();
 new UpdateSystem({ update, render }).start();

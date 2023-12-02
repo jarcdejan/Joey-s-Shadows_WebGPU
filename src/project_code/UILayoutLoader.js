@@ -9,7 +9,7 @@ export class UILayoutLoader{
 
     async getLayout() {
         const layout = [
-            new UIBattery({position: [this.canvas.width - 50, this.canvas.height - 25], percentage: 0.6, light: this.light})
+            new UIBattery({percentage: 0.6, light: this.light, canvas: this.canvas})
         ]
 
         for(const element of layout){

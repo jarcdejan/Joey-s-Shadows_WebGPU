@@ -41,7 +41,7 @@ export class Light {
         this.ambientOn = ambientOn;
 
         domElement.ownerDocument.addEventListener('keydown', e => {
-            if(e.code == "KeyQ"){
+            if(e.code == "KeyE"){
                 this.node.getComponentOfType(TriggerSoundEmitter)?.trigger();
                 if(this.percentage < 0)
                     return
