@@ -110,11 +110,21 @@ fn fragment(input : FragmentInput) -> FragmentOutput {
 
 
     var shadowXY = vec2(input.shadowPos.x/input.shadowPos.w * 0.5 + 0.5, input.shadowPos.y/input.shadowPos.w * -0.5 + 0.5);
-    
-    var visibility = textureSampleCompare(
+
+
+    var visibility = 0.0;
+    let oneOverShadowDepthTextureSize = 1.0 / 2048;
+    for (var y = -1; y <= 1; y++) {
+        for (var x = -1; x <= 1; x++) {
+            let offset = vec2<f32>(vec2(x, y)) * oneOverShadowDepthTextureSize;
+
+            visibility += textureSampleCompare(
                 shadowMap, shadowSampler,
-                shadowXY, (input.shadowPos.z - 0.005) / input.shadowPos.w
-    );
+                shadowXY + offset, (input.shadowPos.z - 0.005) / input.shadowPos.w
+            );
+        }
+    }
+    visibility /= 9.0;
 
     let shadowPos = input.shadowPos / input.shadowPos.w;
 
