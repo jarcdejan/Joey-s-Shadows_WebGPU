@@ -1,7 +1,6 @@
 import { mat4 } from '../../../lib/gl-matrix-module.js';
 import { TriggerSoundEmitter } from './TriggerSoundEmitter.js';
 
-const d = new Date();
 const workingTime = 60 * 1000;
 
 export class Light {
@@ -19,6 +18,7 @@ export class Light {
         far = 100,
         domElement,
         node,
+        timer,
 
     } = {}) {
         this.color = color;
@@ -39,6 +39,8 @@ export class Light {
         this.setIntensity = intensity;
         this.ambientOff = ambientOff;
         this.ambientOn = ambientOn;
+
+        this.timer = timer;
 
         domElement.ownerDocument.addEventListener('keydown', e => {
             if(e.code == "KeyE"){
@@ -67,18 +69,11 @@ export class Light {
     }
 
     update() {
-        const d = new Date();
+        let time = this.timer.currTime;
+        let previousTime = this.timer.lastTime;
 
-        if(this.previousTime == null){
-            this.previousTime = d.getTime();
-        }
-
-        let time = d.getTime();
-
-        if(this.on && time - this.previousTime < 1000)
-            this.percentage -= (time - this.previousTime) / workingTime
-
-        this.previousTime = time;
+        if(this.on)
+            this.percentage -= (time - previousTime) / workingTime;
 
         if(this.percentage < 0){
             this.on = false;

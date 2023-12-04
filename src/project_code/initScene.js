@@ -9,7 +9,7 @@ import {
     Transform,
 } from '../engine/core.js';
 
-export async function initScene(scene, camera, light) {
+export async function initScene(scene, camera, light, timer) {
 
     const AudioContext = window.AudioContext || window.webkitAudioContext;
     const audioCtx = new AudioContext();
@@ -45,6 +45,7 @@ export async function initScene(scene, camera, light) {
         node: soundNode,
         audioCtx,
         audioBuffer,
+        timer,
     }));
     soundNode.addComponent(new Transform({
         translation: [5,0,5],
@@ -76,6 +77,8 @@ export async function initScene(scene, camera, light) {
         tripwireNode: tripwireNode,
         playerNode: camera,
         triggerNodes: [soundNode1],
+        timer,
+        cooldown: 10 * 1000,
     }));
     scene.addChild(tripwireNode);
 

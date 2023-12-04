@@ -32,6 +32,7 @@ import {
 import { initScene } from './initScene.js';
 import { Pause } from './pause.js';
 import { PauseLayoutLoader } from './PauseLayoutLoader.js';
+import { Timer } from './timer.js';
 
 const canvas = document.getElementById('webgpuCanvas');
 const renderer = new Renderer(canvas);
@@ -64,6 +65,8 @@ scene.traverse(node => {
     node.isStatic = true;
 });
 
+const pauseCheck = new Pause(canvas);
+let globalTimer = new Timer();
 
 const light = new Node();
 light.addComponent(new Transform({
@@ -72,10 +75,11 @@ light.addComponent(new Transform({
 light.addComponent(new Light({
     domElement: canvas,
     node: light,
+    timer: globalTimer,
 }));
 camera.addChild(light);
 
-await initScene(scene, camera, light);
+await initScene(scene, camera, light, globalTimer);
 
 
 const canvas2d = document.getElementById("2dCanvas")
@@ -86,14 +90,16 @@ const pauseLayout = await pauseLayoutLoader.getLayout();
 const uiRenderer = new UIRenderer(canvas2d);
 uiRenderer.init();
 
-
-let pauseCheck = new Pause(canvas);
-
+//set timer before first loop
+globalTimer.update();
 
 function update(t, dt) {
 
+    globalTimer.update();
+
     if(pauseCheck.paused)
         return;
+
 
     scene.traverse(node => {
         for (const component of node.components) {
