@@ -1,4 +1,4 @@
-import { mat3, mat4 } from '../../../lib/gl-matrix-module.js';
+import { mat3, mat4, vec3 } from '../../../lib/gl-matrix-module.js';
 
 import * as WebGPU from '../WebGPU.js';
 
@@ -8,6 +8,7 @@ import {
     getLocalModelMatrix,
     getGlobalViewMatrix,
     getProjectionMatrix,
+    getGlobalRotation,
     getModels,
 } from '../core/SceneUtils.js';
 
@@ -207,6 +208,16 @@ export class UnlitRenderer extends BaseRenderer {
         for (const primitive of model.primitives) {
             this.renderPrimitive(primitive);
         }
+    }
+
+    getCameraPosition(camera) {
+        const cameraPos = mat4.getTranslation(vec3.create(), getLocalModelMatrix(camera));
+        return cameraPos;
+    }
+
+    getCameraViewDirection(camera) {
+        const cameraDir = getGlobalRotation(camera);
+        return cameraDir;
     }
 
     renderPrimitive(primitive) {

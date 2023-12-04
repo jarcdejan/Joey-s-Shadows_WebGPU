@@ -1,9 +1,12 @@
 export class Node {
 
-    constructor() {
+    constructor(nameOrIndex) {
+        this.name = nameOrIndex;
         this.children = [];
         this.parent = null;
         this.components = [];
+        this.mesh = null; 
+        this.transformationMatrix = null;
     }
 
     addChild(node) {

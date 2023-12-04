@@ -1,4 +1,4 @@
-import { mat4 } from '../../../lib/gl-matrix-module.js';
+import { mat4, quat } from '../../../lib/gl-matrix-module.js';
 
 import { Camera } from './Camera.js';
 import { Model } from './Model.js';
@@ -39,4 +39,18 @@ export function getProjectionMatrix(node) {
 
 export function getModels(node) {
     return node.getComponentsOfType(Model);
+}
+
+export function getGlobalRotation(node) {
+    if (node.parent) {
+        const parentRotation = getGlobalRotation(node.parent);
+        const localRotation = node.getComponentOfType(Transform).rotation;
+        return quat.multiply(quat.create(), parentRotation, localRotation);
+    } else {
+        const transform = node.getComponentOfType(Transform);
+        if (transform) {
+            return transform.rotation;
+        }
+        return quat.create();
+    }
 }
