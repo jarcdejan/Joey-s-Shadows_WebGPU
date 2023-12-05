@@ -55,8 +55,8 @@ let globalTimer = new Timer();
 camera.addComponent(new FirstPersonController(camera, canvas));
 camera.isDynamic = true;
 camera.aabb = {
-    min: [-0.2, -0.7, -0.6],
-    max: [0.4, 0.7, 0.6],
+    min: [-0.2, -0.8, -0.6],
+    max: [0.4, 0.8, 0.6],
 };
 
 // Collision and physics in the scene
