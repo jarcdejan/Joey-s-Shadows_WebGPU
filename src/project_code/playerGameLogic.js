@@ -47,6 +47,9 @@ export class PlayerGameLogic {
         this.monsterEvent = false;
         this.quicktimeGoal = 100;
 
+        this.dead = false;
+        this.won = false;
+
         this.initHandlers();
 
     }
@@ -79,18 +82,33 @@ export class PlayerGameLogic {
         this.keys[e.code] = true;
     }
 
-    trigger() {
-        this.monsterEvent = true;
-        this.walkingSoundNode.getComponentOfType(WalkingSound).disabled = true;
-        this.node.getComponentOfType(ShakingAnimation).start();
-        this.sanityLossCooldown2 = 1000;
-        this.node.getComponentOfType(FirstPersonController).rooted = true;
-        this.numPresses = 0;
-        this.nextKey = "Q";
+    trigger({which}) {
+        if(which == "monsterEvent"){
+            this.monsterEvent = true;
+            this.walkingSoundNode.getComponentOfType(WalkingSound).disabled = true;
+            this.node.getComponentOfType(ShakingAnimation).start();
+            this.sanityLossCooldown2 = 1000;
+            this.node.getComponentOfType(FirstPersonController).rooted = true;
+            this.numPresses = 0;
+            this.nextKey = "Q";
+        }
+        else if(which == "victory") {
+            this.won = true;
+        }
     }
 
     update() {
         //console.log(this.node.getComponentOfType(Transform).translation)
+        if(this.won)
+            console.log("victory");
+        if(this.dead)
+            console.log("dead");
+        
+            
+        //check for death
+        if(this.sanity == 0){
+            this.dead = true;
+        }
 
         if(this.monsterEvent){
 
@@ -99,11 +117,6 @@ export class PlayerGameLogic {
             if(this.sanityLossCooldown2 < 0){
                 this.sanity -= this.sanityLoss2;
                 this.sanityLossCooldown2 = 1000
-            }
-
-            //check for death
-            if(this.sanity == 0){
-                //die
             }
 
             //check key presses

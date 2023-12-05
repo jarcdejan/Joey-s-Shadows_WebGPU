@@ -6,6 +6,7 @@ export class Tripwire {
     constructor({
         tripwireNode,
         playerNode,
+        passObject,
         marginX = 1,
         marginZ = 1,
         repeat = true,
@@ -15,6 +16,7 @@ export class Tripwire {
     } = {}) {
         this.tripwireNode = tripwireNode;
         this.playerNode = playerNode;
+        this.passObject = passObject;
         this.marginX = marginX;
         this.marginZ = marginZ;
         this.repeat = repeat;
@@ -50,7 +52,7 @@ export class Tripwire {
             this.triggered = true;
             for(const node of this.triggerNodes){
                 for (const component of node.components) {
-                    component.trigger?.();
+                    component.trigger?.(this.passObject);
                 }
             }
         }

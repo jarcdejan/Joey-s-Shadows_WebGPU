@@ -1,4 +1,4 @@
-import { ImageLoader } from '../engine/loaders/ImageLoader.js'
+import { ImageLoader } from '../../engine/loaders/ImageLoader.js'
 
 export class UISanity{
 

@@ -15,8 +15,8 @@ import { Renderer } from './Renderer.js';
 
 import { Light } from './Light.js';
 
-import { UILayoutLoader } from './UILayoutLoader.js';
-import { UIRenderer } from './UIRenderer.js';
+import { UILayoutLoader } from './UIcode/UILayoutLoader.js';
+import { UIRenderer } from './UIcode/UIRenderer.js';
 
 import {
     Camera,
@@ -30,7 +30,7 @@ import {
 } from '../engine/core.js';
 import { initScene } from './initScene.js';
 import { Pause } from './pause.js';
-import { PauseLayoutLoader } from './PauseLayoutLoader.js';
+import { PauseLayoutLoader } from './UIcode/PauseLayoutLoader.js';
 import { Timer } from './timer.js';
 import { PlayerGameLogic } from './playerGameLogic.js';
 import { ShakingAnimation } from './shakingAnimation.js';

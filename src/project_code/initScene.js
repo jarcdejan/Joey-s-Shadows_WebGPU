@@ -85,17 +85,33 @@ export async function initScene(scene, camera, light, timer) {
 
 
     const tripwireNode1 = new Node();
-    tripwireNode.addComponent(new Transform({
+    tripwireNode1.addComponent(new Transform({
         translation: [0,0,-5],
     }));
-    tripwireNode.addComponent(new Tripwire({
+    tripwireNode1.addComponent(new Tripwire({
         tripwireNode: tripwireNode1,
         playerNode: camera,
         triggerNodes: [soundNode1, camera],
+        passObject: {which: "monsterEvent"},
         timer,
         repeat: false,
     }));
     scene.addChild(tripwireNode1);
+
+
+    const tripwireNode2 = new Node();
+    tripwireNode2.addComponent(new Transform({
+        translation: [12,0,14],
+    }));
+    tripwireNode2.addComponent(new Tripwire({
+        tripwireNode: tripwireNode2,
+        playerNode: camera,
+        triggerNodes: [camera],
+        passObject: {which: "victory"},
+        timer,
+        repeat: false,
+    }));
+    scene.addChild(tripwireNode2);
 
 
     const soundFileStep1 = await fetch('../../res/sounds/step01.wav');
