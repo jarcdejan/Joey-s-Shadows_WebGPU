@@ -16,14 +16,15 @@ export class PlayerGameLogic {
         sanityLoss1 = 1,
         sanityLoss2 = 3,
 
-        batteries = 0,
-        pills = 0,
+        batteries = 2,
+        pills = 2,
         keyes = 0,
     } = {}) {
 
         this.node = node;
         this.light = light;
         this.walkingSoundNode = null;
+        this.itemSoundNodes = null;
         this.domElement = domElement;
         this.timer = timer;
 
@@ -62,7 +63,11 @@ export class PlayerGameLogic {
 
         doc.addEventListener('keydown', this.keydownHandler);
 
+
         doc.addEventListener('keydown', e => {
+            //console.log(e.code)
+
+            //switch light
             if(e.code == "KeyF" && !e.repeat){
                 this.light.getComponentOfType(TriggerSoundEmitter)?.trigger();
                 if(this.batteryPercentage > 0)
@@ -75,6 +80,29 @@ export class PlayerGameLogic {
                         this.lightOn = true;
                     }
             }
+
+            if(e.code == "Digit1" && !e.repeat){
+                if(this.batteries > 0){
+                    this.batteries -= 1;
+                    this.batteryPercentage = 1;
+                    this.itemSoundNodes.batteryUse.getComponentOfType(TriggerSoundEmitter)?.trigger();
+                }
+                else {
+                    this.itemSoundNodes.error.getComponentOfType(TriggerSoundEmitter)?.trigger();
+                }
+            }
+
+            if(e.code == "Digit2" && !e.repeat){
+                if(this.pills > 0){
+                    this.pills -= 1;
+                    this.sanity = this.maxSanity;
+                    this.itemSoundNodes.pillsUse.getComponentOfType(TriggerSoundEmitter)?.trigger();
+                }
+                else {
+                    this.itemSoundNodes.error.getComponentOfType(TriggerSoundEmitter)?.trigger();
+                }
+            }
+
         });
     }
 
@@ -104,9 +132,9 @@ export class PlayerGameLogic {
         if(this.dead)
             console.log("dead");
         
-            
+
         //check for death
-        if(this.sanity == 0){
+        if(this.sanity <= 0){
             this.dead = true;
         }
 
@@ -142,8 +170,11 @@ export class PlayerGameLogic {
         if(this.lightOn)
             this.batteryPercentage -= (this.timer.currTime - this.timer.lastTime) / this.lightWorkingTime;
 
-        if(this.lightOn && this.batteryPercentage < 0)
+        if(this.lightOn && this.batteryPercentage < 0){
+            this.lightOn = false;
             this.light.getComponentOfType(Light).turnOff();
+            this.light.getComponentOfType(TriggerSoundEmitter)?.trigger();
+        }
 
 
         //loose sanity if light off
