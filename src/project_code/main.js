@@ -3,6 +3,8 @@ import { UpdateSystem } from '../engine/systems/UpdateSystem.js';
 
 import { GLTFLoader } from '../engine/loaders/GLTFLoader.js';
 import { UnlitRenderer } from '../engine/renderers/UnlitRenderer.js';
+import { TurntableController } from '../engine/controllers/TurntableController.js';
+import { getGlobalModelMatrix } from '../engine/core/SceneUtils.js';
 import { FirstPersonController } from '../engine/controllers/FirstPersonController.js';
 
 import {
@@ -31,13 +33,14 @@ import {
     Transform,
 } from '../engine/core.js';
 import { initScene } from './initScene.js';
+import { RotateAnimator } from '../engine/animators/RotateAnimator.js';
 
 const canvas = document.querySelector('canvas');
 const renderer = new Renderer(canvas);
 await renderer.initialize();
 
 const loader = new GLTFLoader();
-await loader.load('../../res/scene/test4.gltf');
+await loader.load('../../res/scene/test6.gltf');
 
 const scene = loader.loadScene(loader.defaultScene);
 const camera = loader.loadNode('Camera');
@@ -45,12 +48,12 @@ const camera = loader.loadNode('Camera');
 camera.addComponent(new FirstPersonController(camera, canvas));
 camera.isDynamic = true;
 camera.aabb = {
-    min: [-0.2, -0.2, -0.2],
-    max: [0.4, 0.2, 0.2],
+    min: [-0.2, -0.7, -0.6],
+    max: [0.4, 0.7, 0.6],
 };
 
+// Collision and physics in the scene
 const physics = new Physics(scene);
-
 scene.traverse(node => {
     const model = node.getComponentOfType(Model);
     if (!model) {
@@ -64,9 +67,11 @@ scene.traverse(node => {
 });
 
 
+// Light - spotlight
 const light = new Node();
+
 light.addComponent(new Transform({
-    translation: [0.4,-0.8,0],
+    translation: [0.4,-0.9,0],
 }));
 light.addComponent(new Light({
     domElement: canvas,

@@ -4,7 +4,7 @@ export class Light {
 
     constructor({
         color = [255, 255, 255],
-        intensity = 2,
+        intensity = 3,
         attenuation = [0.001, 0.1, 0.3],
         ambient = 0.01,
         fi = 0.3,
