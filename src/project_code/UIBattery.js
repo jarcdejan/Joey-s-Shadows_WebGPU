@@ -9,7 +9,7 @@ export class UIBattery{
         imageUrl1 = "../../res/UI/battery.png",
         imageUrl2 = "../../res/UI/batteryFull.png",
         percentage = 1,
-        light,
+        playerLogic,
         canvas,
     }) {
         this.name = name;
@@ -19,7 +19,7 @@ export class UIBattery{
         this.imageUrl2 = imageUrl2;
 
         this.percentage = percentage;
-        this.light = light;
+        this.playerLogic = playerLogic;
         this.canvas = canvas;
     }
 
@@ -31,7 +31,7 @@ export class UIBattery{
     }
 
     update() {
-        this.percentage = this.light.percentage;
+        this.percentage = this.playerLogic.batteryPercentage;
         //console.log(this.percentage)
     }
 

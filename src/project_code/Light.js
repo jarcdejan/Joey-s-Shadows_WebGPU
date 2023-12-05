@@ -1,8 +1,6 @@
 import { mat4 } from '../../../lib/gl-matrix-module.js';
 import { TriggerSoundEmitter } from './TriggerSoundEmitter.js';
 
-const workingTime = 60 * 1000;
-
 export class Light {
 
     constructor({
@@ -16,9 +14,6 @@ export class Light {
         aspect = 1,
         near = 0.1,
         far = 100,
-        domElement,
-        node,
-        timer,
 
     } = {}) {
         this.color = color;
@@ -32,35 +27,10 @@ export class Light {
         this.far = far;
 
         this.on = true;
-        this.node = node;
-
-        this.percentage = 1;
 
         this.setIntensity = intensity;
         this.ambientOff = ambientOff;
         this.ambientOn = ambientOn;
-
-        this.timer = timer;
-
-        domElement.ownerDocument.addEventListener('keydown', e => {
-            if(e.code == "KeyE"){
-                this.node.getComponentOfType(TriggerSoundEmitter)?.trigger();
-                if(this.percentage < 0)
-                    return
-
-                if(this.on){
-                    this.on = false;
-                    this.intensity = 0;
-                    this.ambient = this.ambientOff;
-                }
-                else{
-                    this.on = true;
-                    this.intensity = this.setIntensity;
-                    this.ambient = this.ambientOn;
-                }
-            }
-        });
-
     }
 
     get perspectiveMatrix() {
@@ -68,18 +38,16 @@ export class Light {
         return mat4.perspectiveZO(mat4.create(), fovy, aspect, near, far);
     }
 
-    update() {
-        let time = this.timer.currTime;
-        let previousTime = this.timer.lastTime;
+    turnOn() {
+        this.on = true;
+        this.intensity = this.setIntensity;
+        this.ambient = this.ambientOn;
+    }
 
-        if(this.on)
-            this.percentage -= (time - previousTime) / workingTime;
-
-        if(this.percentage < 0){
-            this.on = false;
-            this.ambient = this.ambientOff;
-            this.intensity = 0;
-        }
+    turnOff() {
+        this.on = false;
+        this.intensity = 0;
+        this.ambient = this.ambientOff;
     }
 
 }

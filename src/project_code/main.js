@@ -2,7 +2,6 @@ import { ResizeSystem } from '../engine/systems/ResizeSystem.js';
 import { UpdateSystem } from '../engine/systems/UpdateSystem.js';
 
 import { GLTFLoader } from '../engine/loaders/GLTFLoader.js';
-import { UnlitRenderer } from '../engine/renderers/UnlitRenderer.js';
 import { FirstPersonController } from '../engine/controllers/FirstPersonController.js';
 
 import {
@@ -33,6 +32,7 @@ import { initScene } from './initScene.js';
 import { Pause } from './pause.js';
 import { PauseLayoutLoader } from './PauseLayoutLoader.js';
 import { Timer } from './timer.js';
+import { PlayerGameLogic } from './playerGameLogic.js';
 
 const canvas = document.getElementById('webgpuCanvas');
 const renderer = new Renderer(canvas);
@@ -43,6 +43,9 @@ await loader.load('../../res/scene/test3.gltf');
 
 const scene = loader.loadScene(loader.defaultScene);
 const camera = loader.loadNode('Camera');
+
+const pauseCheck = new Pause(canvas);
+let globalTimer = new Timer();
 
 camera.addComponent(new FirstPersonController(camera, canvas));
 camera.isDynamic = true;
@@ -65,9 +68,6 @@ scene.traverse(node => {
     node.isStatic = true;
 });
 
-const pauseCheck = new Pause(canvas);
-let globalTimer = new Timer();
-
 const light = new Node();
 light.addComponent(new Transform({
     translation: [0.4,-0.8,0],
@@ -78,12 +78,13 @@ light.addComponent(new Light({
     timer: globalTimer,
 }));
 camera.addChild(light);
+camera.addComponent(new PlayerGameLogic({node: camera, light: light ,timer: globalTimer, domElement: canvas}))
 
 await initScene(scene, camera, light, globalTimer);
 
 
 const canvas2d = document.getElementById("2dCanvas")
-const uiLayoutLoader = new UILayoutLoader(canvas, light.getComponentOfType(Light));
+const uiLayoutLoader = new UILayoutLoader(canvas, camera.getComponentOfType(PlayerGameLogic), globalTimer);
 const uiLayout = await uiLayoutLoader.getLayout();
 const pauseLayoutLoader = new PauseLayoutLoader(canvas);
 const pauseLayout = await pauseLayoutLoader.getLayout();
@@ -131,7 +132,6 @@ function resize({ displaySize: { width, height }}) {
 window.addEventListener("resize", (event) => {
     canvas2d.width = window.innerWidth;
     canvas2d.height = window.innerHeight;
-    console.log("aaa")
 });
 
 new ResizeSystem({ canvas, resize }).start();

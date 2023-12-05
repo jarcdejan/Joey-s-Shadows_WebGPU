@@ -29,12 +29,16 @@ export class Tripwire {
     update() {
 
         if(this.triggered){
-            this.remainingTime -= this.timer.currTime - this.timer.lastTime;
-            if(this.remainingTime < 0){
-                this.triggered = false;
-                this.remainingTime = this.cooldown;
-            }
-            else{
+            if(this.repeat){
+                this.remainingTime -= this.timer.currTime - this.timer.lastTime;
+                if(this.remainingTime < 0){
+                    this.triggered = false;
+                    this.remainingTime = this.cooldown;
+                }
+                else{
+                    return;
+                }
+            } else {
                 return;
             }
         }

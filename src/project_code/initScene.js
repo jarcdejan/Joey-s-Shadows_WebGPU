@@ -83,6 +83,20 @@ export async function initScene(scene, camera, light, timer) {
     scene.addChild(tripwireNode);
 
 
+    const tripwireNode1 = new Node();
+    tripwireNode.addComponent(new Transform({
+        translation: [0,0,-5],
+    }));
+    tripwireNode.addComponent(new Tripwire({
+        tripwireNode: tripwireNode1,
+        playerNode: camera,
+        triggerNodes: [soundNode1, camera],
+        timer,
+        repeat: false,
+    }));
+    scene.addChild(tripwireNode1);
+
+
     const soundFileStep1 = await fetch('../../res/sounds/step01.wav');
     const arrayBufferStep1 = await soundFileStep1.arrayBuffer();
     const audioBufferStep1 = await audioCtx.decodeAudioData(arrayBufferStep1);
