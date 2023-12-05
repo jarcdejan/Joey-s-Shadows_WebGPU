@@ -33,6 +33,7 @@ import { Pause } from './pause.js';
 import { PauseLayoutLoader } from './PauseLayoutLoader.js';
 import { Timer } from './timer.js';
 import { PlayerGameLogic } from './playerGameLogic.js';
+import { ShakingAnimation } from './shakingAnimation.js';
 
 const canvas = document.getElementById('webgpuCanvas');
 const renderer = new Renderer(canvas);
@@ -78,7 +79,9 @@ light.addComponent(new Light({
     timer: globalTimer,
 }));
 camera.addChild(light);
-camera.addComponent(new PlayerGameLogic({node: camera, light: light ,timer: globalTimer, domElement: canvas}))
+
+camera.addComponent(new PlayerGameLogic({node: camera, light: light ,timer: globalTimer, domElement: canvas}));
+camera.addComponent(new ShakingAnimation({node: camera, timer: globalTimer}));
 
 await initScene(scene, camera, light, globalTimer);
 

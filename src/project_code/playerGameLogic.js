@@ -2,6 +2,7 @@ import { FirstPersonController } from "../engine/controllers/FirstPersonControll
 import { TriggerSoundEmitter } from "./TriggerSoundEmitter.js";
 import { Transform } from "../engine/core.js";
 import { Light } from "./Light.js";
+import { ShakingAnimation } from "./shakingAnimation.js";
 
 export class PlayerGameLogic {
 
@@ -77,6 +78,7 @@ export class PlayerGameLogic {
 
     trigger() {
         this.monsterEvent = true;
+        this.node.getComponentOfType(ShakingAnimation).start();
         this.sanityLossCooldown2 = 1000;
         this.node.getComponentOfType(FirstPersonController).rooted = true;
         this.numPresses = 0;
@@ -116,6 +118,7 @@ export class PlayerGameLogic {
             if(this.numPresses >= this.quicktimeGoal) {
                 this.monsterEvent = false;
                 this.node.getComponentOfType(FirstPersonController).rooted = false;
+                this.node.getComponentOfType(ShakingAnimation).stop();
             }
         }
 
