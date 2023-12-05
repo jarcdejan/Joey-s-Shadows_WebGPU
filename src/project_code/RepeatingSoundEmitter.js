@@ -6,6 +6,7 @@ export class RepeatingSoundEmitter {
     constructor({
         node,
         audioCtx,
+        timer,
         panningModel = "HRTF",
         distanceModel = "linear",
         maxDistance = 100,
@@ -16,8 +17,10 @@ export class RepeatingSoundEmitter {
         gain = 1,
     } = {}) {
 
-        this.node = node
-        this.cooldown = cooldown
+        this.node = node;
+        this.cooldown = cooldown;
+        this.remainingTime = cooldown;
+        this.timer = timer;
 
         this.panner = new PannerNode(audioCtx, {
             panningModel,
@@ -41,7 +44,6 @@ export class RepeatingSoundEmitter {
         this.audioCtx = audioCtx
 
         this.playing = false
-        this.startTime = 0
         this.enabled = true
     }
 
@@ -52,16 +54,15 @@ export class RepeatingSoundEmitter {
         this.panner.positionY.value = position[1];
         this.panner.positionZ.value = position[2];
 
-        const d = new Date();
-        let time = d.getTime();
+        this.remainingTime -= this.timer.currTime - this.timer.lastTime;
 
-        if(this.playing == false && navigator.userActivation.isActive && time - this.startTime > this.cooldown && this.enabled){
+        if(this.playing == false && navigator.userActivation.isActive && this.remainingTime < 0 && this.enabled){
             let source = this.audioCtx.createBufferSource();
             source.buffer = this.audioBuffer;
             source.connect(this.panner).connect(this.gain).connect(this.audioCtx.destination);
             source.start();
             this.playing = true;
-            this.startTime = d.getTime();;
+            this.remainingTime = this.cooldown;
             source.addEventListener("ended", e =>{
                 this.playing = false;
             });

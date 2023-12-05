@@ -1,4 +1,5 @@
 import { mat4 } from '../../../lib/gl-matrix-module.js';
+import { TriggerSoundEmitter } from './TriggerSoundEmitter.js';
 
 export class Light {
 
@@ -6,20 +7,19 @@ export class Light {
         color = [255, 255, 255],
         intensity = 3,
         attenuation = [0.001, 0.1, 0.3],
-        ambient = 0.01,
+        ambientOff = 0.01,
+        ambientOn = 0.04,
         fi = 0.3,
         fovy = Math.PI/2,
         aspect = 1,
         near = 0.1,
         far = 100,
-        domElement,
 
     } = {}) {
         this.color = color;
         this.intensity = intensity;
-        this.setIntensity = intensity;
         this.attenuation = attenuation;
-        this.ambient = ambient;
+        this.ambient = ambientOn;
         this.fi = fi;
         this.fovy = fovy;
         this.aspect = aspect;
@@ -28,25 +28,26 @@ export class Light {
 
         this.on = true;
 
-        domElement.ownerDocument.addEventListener('keydown', e => {
-            console.log(e.code)
-            if(e.code == "KeyQ"){
-                if(this.on){
-                    this.on = false;
-                    this.intensity = 0;
-                }
-                else{
-                    this.on = true;
-                    this.intensity = this.setIntensity;
-                }
-            }
-        });
-
+        this.setIntensity = intensity;
+        this.ambientOff = ambientOff;
+        this.ambientOn = ambientOn;
     }
 
     get perspectiveMatrix() {
         const { fovy, aspect, near, far } = this;
         return mat4.perspectiveZO(mat4.create(), fovy, aspect, near, far);
+    }
+
+    turnOn() {
+        this.on = true;
+        this.intensity = this.setIntensity;
+        this.ambient = this.ambientOn;
+    }
+
+    turnOff() {
+        this.on = false;
+        this.intensity = 0;
+        this.ambient = this.ambientOff;
     }
 
 }

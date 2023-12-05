@@ -17,10 +17,9 @@ import { Physics } from '../engine/Physics.js';
 import { Renderer } from './Renderer.js';
 
 import { Light } from './Light.js';
-import { SoundListener } from './SoundListener.js'
-import { RepeatingSoundEmitter } from './RepeatingSoundEmitter.js';
-import { TriggerSoundEmitter } from './TriggerSoundEmitter.js';
-import { Tripwire } from './Tripwire.js';
+
+import { UILayoutLoader } from './UIcode/UILayoutLoader.js';
+import { UIRenderer } from './UIcode/UIRenderer.js';
 
 import {
     Camera,
@@ -34,8 +33,13 @@ import {
 } from '../engine/core.js';
 import { initScene } from './initScene.js';
 import { RotateAnimator } from '../engine/animators/RotateAnimator.js';
+import { Pause } from './pause.js';
+import { PauseLayoutLoader } from './UIcode/PauseLayoutLoader.js';
+import { Timer } from './timer.js';
+import { PlayerGameLogic } from './playerGameLogic.js';
+import { ShakingAnimation } from './shakingAnimation.js';
 
-const canvas = document.querySelector('canvas');
+const canvas = document.getElementById('webgpuCanvas');
 const renderer = new Renderer(canvas);
 await renderer.initialize();
 
@@ -44,6 +48,9 @@ await loader.load('../../res/scene/test6.gltf');
 
 const scene = loader.loadScene(loader.defaultScene);
 const camera = loader.loadNode('Camera');
+
+const pauseCheck = new Pause(canvas);
+let globalTimer = new Timer();
 
 camera.addComponent(new FirstPersonController(camera, canvas));
 camera.isDynamic = true;
@@ -75,13 +82,36 @@ light.addComponent(new Transform({
 }));
 light.addComponent(new Light({
     domElement: canvas,
+    node: light,
+    timer: globalTimer,
 }));
 camera.addChild(light);
 
-await initScene(scene, camera)
+camera.addComponent(new PlayerGameLogic({node: camera, light: light ,timer: globalTimer, domElement: canvas}));
+camera.addComponent(new ShakingAnimation({node: camera, timer: globalTimer}));
 
+await initScene(scene, camera, light, globalTimer);
+
+
+const canvas2d = document.getElementById("2dCanvas")
+const uiLayoutLoader = new UILayoutLoader(canvas, camera.getComponentOfType(PlayerGameLogic), globalTimer);
+const uiLayout = await uiLayoutLoader.getLayout();
+const pauseLayoutLoader = new PauseLayoutLoader(canvas);
+const pauseLayout = await pauseLayoutLoader.getLayout();
+const uiRenderer = new UIRenderer(canvas2d);
+uiRenderer.init();
+
+//set timer before first loop
+globalTimer.update();
 
 function update(t, dt) {
+
+    globalTimer.update();
+
+    if(pauseCheck.paused)
+        return;
+
+
     scene.traverse(node => {
         for (const component of node.components) {
             component.update?.(t, dt);
@@ -89,15 +119,30 @@ function update(t, dt) {
     });
 
     physics.update(t, dt);
+
+    for(const element of uiLayout){
+        element?.update();
+    }
 }
 
 function render() {
-    renderer.render(scene, camera, light);
+    if(!pauseCheck.paused){
+        renderer.render(scene, camera, light);
+        uiRenderer.render(uiLayout);
+    }
+    else{
+        uiRenderer.render(pauseLayout);
+    }
 }
 
 function resize({ displaySize: { width, height }}) {
     camera.getComponentOfType(Camera).aspect = width / height;
 }
+
+window.addEventListener("resize", (event) => {
+    canvas2d.width = window.innerWidth;
+    canvas2d.height = window.innerHeight;
+});
 
 new ResizeSystem({ canvas, resize }).start();
 new UpdateSystem({ update, render }).start();

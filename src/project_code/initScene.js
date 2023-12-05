@@ -8,8 +8,9 @@ import {
     Node,
     Transform,
 } from '../engine/core.js';
+import { PlayerGameLogic } from './playerGameLogic.js';
 
-export async function initScene(scene, camera) {
+export async function initScene(scene, camera, light, timer) {
 
     const AudioContext = window.AudioContext || window.webkitAudioContext;
     const audioCtx = new AudioContext();
@@ -25,6 +26,18 @@ export async function initScene(scene, camera) {
     camera.addChild(listenerNode);
 
 
+    const soundFileSwitch = await fetch('../../res/sounds/switch.wav');
+    const arrayBufferSwitch = await soundFileSwitch.arrayBuffer();
+    const audioBufferSwitch = await audioCtx.decodeAudioData(arrayBufferSwitch);
+
+    light.addComponent(new TriggerSoundEmitter({
+        node: light,
+        audioCtx,
+        audioBuffer: audioBufferSwitch,
+        gain: 0.5,
+    }))
+
+
     const soundFile = await fetch('../../res/sounds/whispering.mp3');
     const arrayBuffer = await soundFile.arrayBuffer();
     const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
@@ -33,6 +46,7 @@ export async function initScene(scene, camera) {
         node: soundNode,
         audioCtx,
         audioBuffer,
+        timer,
     }));
     soundNode.addComponent(new Transform({
         translation: [5,0,5],
@@ -64,8 +78,40 @@ export async function initScene(scene, camera) {
         tripwireNode: tripwireNode,
         playerNode: camera,
         triggerNodes: [soundNode1],
+        timer,
+        cooldown: 10 * 1000,
     }));
     scene.addChild(tripwireNode);
+
+
+    const tripwireNode1 = new Node();
+    tripwireNode1.addComponent(new Transform({
+        translation: [0,0,-5],
+    }));
+    tripwireNode1.addComponent(new Tripwire({
+        tripwireNode: tripwireNode1,
+        playerNode: camera,
+        triggerNodes: [soundNode1, camera],
+        passObject: {which: "monsterEvent"},
+        timer,
+        repeat: false,
+    }));
+    scene.addChild(tripwireNode1);
+
+
+    const tripwireNode2 = new Node();
+    tripwireNode2.addComponent(new Transform({
+        translation: [12,0,14],
+    }));
+    tripwireNode2.addComponent(new Tripwire({
+        tripwireNode: tripwireNode2,
+        playerNode: camera,
+        triggerNodes: [camera],
+        passObject: {which: "victory"},
+        timer,
+        repeat: false,
+    }));
+    scene.addChild(tripwireNode2);
 
 
     const soundFileStep1 = await fetch('../../res/sounds/step01.wav');
@@ -95,4 +141,6 @@ export async function initScene(scene, camera) {
         gain: 0.4,
     }));
     camera.addChild(walkingSoundNode)
+    camera.getComponentOfType(PlayerGameLogic).walkingSoundNode = walkingSoundNode;
+
 }
