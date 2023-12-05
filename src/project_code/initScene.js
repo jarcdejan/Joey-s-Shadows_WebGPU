@@ -8,6 +8,7 @@ import {
     Node,
     Transform,
 } from '../engine/core.js';
+import { PlayerGameLogic } from './playerGameLogic.js';
 
 export async function initScene(scene, camera, light, timer) {
 
@@ -124,5 +125,6 @@ export async function initScene(scene, camera, light, timer) {
         gain: 0.4,
     }));
     camera.addChild(walkingSoundNode)
+    camera.getComponentOfType(PlayerGameLogic).walkingSoundNode = walkingSoundNode;
 
 }

@@ -7,10 +7,10 @@ export class UIQuicktimeEvent{
         position = [70, 240], // from bottom left
         imageUrl1 = "../../res/UI/barEmpty.png",
         imageUrl2 = "../../res/UI/barFull.png",
-        imageUrl3 = "../../res/UI/buttonA.png",
-        imageUrl4 = "../../res/UI/buttonAPressed.png",
-        imageUrl5 = "../../res/UI/buttonD.png",
-        imageUrl6 = "../../res/UI/buttonDPressed.png",
+        imageUrl3 = "../../res/UI/buttonQPressed.png",
+        imageUrl4 = "../../res/UI/buttonQ.png",
+        imageUrl5 = "../../res/UI/buttonEPressed.png",
+        imageUrl6 = "../../res/UI/buttonE.png",
         percentage = 1,
         playerLogic,
         canvas,
@@ -61,7 +61,7 @@ export class UIQuicktimeEvent{
         const APosition = [position[0], position[1]];
         const DPosition = [position[0] + 140, position[1]];
 
-        if(this.playerLogic.nextKey == "A"){
+        if(this.playerLogic.nextKey == "Q"){
             context.drawImage(this.image4, APosition[0], APosition[1], this.image4.width, this.image4.height);
             context.drawImage(this.image5, DPosition[0], DPosition[1], this.image5.width, this.image5.height);
         }

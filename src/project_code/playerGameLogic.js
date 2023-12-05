@@ -3,6 +3,7 @@ import { TriggerSoundEmitter } from "./TriggerSoundEmitter.js";
 import { Transform } from "../engine/core.js";
 import { Light } from "./Light.js";
 import { ShakingAnimation } from "./shakingAnimation.js";
+import { WalkingSound } from "./WalkingSound.js";
 
 export class PlayerGameLogic {
 
@@ -14,13 +15,15 @@ export class PlayerGameLogic {
         maxSanity = 100,
         sanityLoss1 = 1,
         sanityLoss2 = 3,
-        batteries = 2,
-        pills = 4,
-        keyes = 1,
+
+        batteries = 0,
+        pills = 0,
+        keyes = 0,
     } = {}) {
 
         this.node = node;
         this.light = light;
+        this.walkingSoundNode = null;
         this.domElement = domElement;
         this.timer = timer;
 
@@ -57,7 +60,7 @@ export class PlayerGameLogic {
         doc.addEventListener('keydown', this.keydownHandler);
 
         doc.addEventListener('keydown', e => {
-            if(e.code == "KeyE" && !e.repeat){
+            if(e.code == "KeyF" && !e.repeat){
                 this.light.getComponentOfType(TriggerSoundEmitter)?.trigger();
                 if(this.batteryPercentage > 0)
                     if(this.lightOn){
@@ -78,11 +81,12 @@ export class PlayerGameLogic {
 
     trigger() {
         this.monsterEvent = true;
+        this.walkingSoundNode.getComponentOfType(WalkingSound).disabled = true;
         this.node.getComponentOfType(ShakingAnimation).start();
         this.sanityLossCooldown2 = 1000;
         this.node.getComponentOfType(FirstPersonController).rooted = true;
         this.numPresses = 0;
-        this.nextKey = "A";
+        this.nextKey = "Q";
     }
 
     update() {
@@ -103,21 +107,21 @@ export class PlayerGameLogic {
             }
 
             //check key presses
-            if(this.nextKey == "A" && this.keys["KeyA"] && !this.keys["KeyD"]) {
+            if(this.nextKey == "Q" && this.keys["KeyQ"] && !this.keys["KeyE"]) {
                 this.numPresses += 1;
-                this.nextKey = "D";
+                this.nextKey = "E";
             }
-            if(this.nextKey == "D" && this.keys["KeyD"] && !this.keys["KeyA"]) {
+            if(this.nextKey == "E" && this.keys["KeyE"] && !this.keys["KeyQ"]) {
                 this.numPresses += 1;
-                this.nextKey = "A";
+                this.nextKey = "Q";
             }
 
-            console.log(this.numPresses)
 
             //check if goal reached
             if(this.numPresses >= this.quicktimeGoal) {
                 this.monsterEvent = false;
                 this.node.getComponentOfType(FirstPersonController).rooted = false;
+                this.walkingSoundNode.getComponentOfType(WalkingSound).disabled = false;
                 this.node.getComponentOfType(ShakingAnimation).stop();
             }
         }
@@ -139,7 +143,7 @@ export class PlayerGameLogic {
         }
 
         //reset all key states
-        this.keys["KeyA"] = false;
-        this.keys["KeyD"] = false;
+        this.keys["KeyQ"] = false;
+        this.keys["KeyE"] = false;
     }
 }

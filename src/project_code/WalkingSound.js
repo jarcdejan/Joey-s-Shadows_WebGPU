@@ -43,9 +43,14 @@ export class WalkingSound {
         this.distance = 0;
         this.lastPosition = mat4.getTranslation(vec3.create(), getGlobalModelMatrix(this.node));
         this.audioIndex = 0;
+
+        this.disabled = false;
     }
 
     update() {
+        if(this.disabled)
+            return;
+        
         let position = mat4.getTranslation(vec3.create(), getGlobalModelMatrix(this.node));
 
         this.panner.positionX.value = position[0];
