@@ -90,6 +90,8 @@ await initScene(scene, camera, light, globalTimer);
 
 //initialize all 2D components of game
 const canvas2d = document.getElementById("2dCanvas")
+canvas2d.width = window.innerWidth;
+canvas2d.height = window.innerHeight;
 const uiLayoutLoader = new UILayoutLoader(canvas2d, camera.getComponentOfType(PlayerGameLogic), globalTimer);
 const uiLayout = await uiLayoutLoader.getLayout();
 const pauseLayoutLoader = new PauseLayoutLoader(canvas2d);

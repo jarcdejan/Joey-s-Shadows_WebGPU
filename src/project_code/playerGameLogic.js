@@ -65,7 +65,7 @@ export class PlayerGameLogic {
 
 
         doc.addEventListener('keydown', e => {
-            console.log(e.code)
+            //console.log(e.code)
 
             //switch light
             if(e.code == "KeyF" && !e.repeat){
@@ -170,8 +170,11 @@ export class PlayerGameLogic {
         if(this.lightOn)
             this.batteryPercentage -= (this.timer.currTime - this.timer.lastTime) / this.lightWorkingTime;
 
-        if(this.lightOn && this.batteryPercentage < 0)
+        if(this.lightOn && this.batteryPercentage < 0){
+            this.lightOn = false;
             this.light.getComponentOfType(Light).turnOff();
+            this.light.getComponentOfType(TriggerSoundEmitter)?.trigger();
+        }
 
 
         //loose sanity if light off
