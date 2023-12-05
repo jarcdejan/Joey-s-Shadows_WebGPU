@@ -34,6 +34,8 @@ import { PauseLayoutLoader } from './UIcode/PauseLayoutLoader.js';
 import { Timer } from './timer.js';
 import { PlayerGameLogic } from './playerGameLogic.js';
 import { ShakingAnimation } from './shakingAnimation.js';
+import { DeathLayoutLoader } from './UIcode/DeathLayoutLoader.js';
+import { VictoryLayoutLoader } from './UIcode/VictoryLayoutLoader.js';
 
 const canvas = document.getElementById('webgpuCanvas');
 const renderer = new Renderer(canvas);
@@ -86,11 +88,16 @@ camera.addComponent(new ShakingAnimation({node: camera, timer: globalTimer}));
 await initScene(scene, camera, light, globalTimer);
 
 
+//initialize all 2D components of game
 const canvas2d = document.getElementById("2dCanvas")
-const uiLayoutLoader = new UILayoutLoader(canvas, camera.getComponentOfType(PlayerGameLogic), globalTimer);
+const uiLayoutLoader = new UILayoutLoader(canvas2d, camera.getComponentOfType(PlayerGameLogic), globalTimer);
 const uiLayout = await uiLayoutLoader.getLayout();
-const pauseLayoutLoader = new PauseLayoutLoader(canvas);
+const pauseLayoutLoader = new PauseLayoutLoader(canvas2d);
 const pauseLayout = await pauseLayoutLoader.getLayout();
+const deathLayoutLoader = new DeathLayoutLoader(canvas2d, globalTimer);
+const deathLayout = await deathLayoutLoader.getLayout();
+const victoryLayoutLoader = new VictoryLayoutLoader(canvas2d, globalTimer);
+const victoryLayout = await victoryLayoutLoader.getLayout();
 const uiRenderer = new UIRenderer(canvas2d);
 uiRenderer.init();
 
@@ -100,6 +107,20 @@ globalTimer.update();
 function update(t, dt) {
 
     globalTimer.update();
+
+    if(camera.getComponentOfType(PlayerGameLogic).won){
+        for(const element of victoryLayout){
+            element?.update();
+        }
+        return;
+    }
+
+    if(camera.getComponentOfType(PlayerGameLogic).dead){
+        for(const element of deathLayout){
+            element?.update();
+        }
+        return;
+    }
 
     if(pauseCheck.paused)
         return;
@@ -119,6 +140,16 @@ function update(t, dt) {
 }
 
 function render() {
+    if(camera.getComponentOfType(PlayerGameLogic).won){
+        uiRenderer.render(victoryLayout);
+        return;
+    }
+
+    if(camera.getComponentOfType(PlayerGameLogic).dead){
+        uiRenderer.render(deathLayout);
+        return;
+    }
+
     if(!pauseCheck.paused){
         renderer.render(scene, camera, light);
         uiRenderer.render(uiLayout);

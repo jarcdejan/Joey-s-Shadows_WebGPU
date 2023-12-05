@@ -37,8 +37,6 @@ export class TriggerSoundEmitter {
 
         this.audioBuffer = audioBuffer
         this.audioCtx = audioCtx
-
-        this.playing = false
     }
 
     update() {
@@ -50,15 +48,11 @@ export class TriggerSoundEmitter {
     }
 
     trigger() {
-        if(this.playing == false && navigator.userActivation.isActive){
+        if(navigator.userActivation.isActive){
             let source = this.audioCtx.createBufferSource();
             source.buffer = this.audioBuffer;
             source.connect(this.panner).connect(this.gain).connect(this.audioCtx.destination);
             source.start();
-            this.playing = true;
-            source.addEventListener("ended", e =>{
-                this.playing = false;
-            });
         }
     }
 
