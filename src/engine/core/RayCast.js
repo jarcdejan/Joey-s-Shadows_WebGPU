@@ -9,43 +9,47 @@ import {
 export class RayCast {
 
     generateRays(canWidth, canHeight, fov, dirVec, posVec) {
-        const rays = [];
+        var rays = [];
     
-        for (let y = 0; y < canHeight; y++) {
-            for (let x = 0; x < canWidth; x++) {
-                const ndcX = (2 * x) / canWidth - 1;
-                const ndcY = 1 - (2 * y) / canHeight;
+        for (let y = 0; y < canHeight/2; y++) {
+            for (let x = 0; x < canWidth/2; x++) {
+                var ndcX = (2 * x) / canWidth - 1;
+                var ndcY = 1 - (2 * y) / canHeight;
                 
-                const aspectRatio = canWidth / canHeight;
-                const tanHalfFov = Math.tan(fov / 2);
-                const cameraSpaceX = ndcX * aspectRatio * tanHalfFov;
-                const cameraSpaceY = ndcY * tanHalfFov;
+                var aspectRatio = canWidth / canHeight;
+                var tanHalfFov = Math.tan(fov / 2);
+                var cameraSpaceX = ndcX * aspectRatio * tanHalfFov;
+                var cameraSpaceY = ndcY * tanHalfFov;
     
-                const rayDir = [
+                var rayDir = [
                     dirVec[0] + cameraSpaceX,
                     dirVec[1] + cameraSpaceY,
                     dirVec[2],
                 ];
     
-                const len = Math.sqrt(
+                var len = Math.sqrt(
                     rayDir[0] * rayDir[0] +
                     rayDir[1] * rayDir[1] + 
                     rayDir[2] * rayDir[2]
                 );
     
-                const normalizedRayDir = [
+                var normalizedRayDir = [
                     rayDir[0] / len,
                     rayDir[1] / len,
                     rayDir[2] / len
                 ];
     
-                rays.push({
+                /*rays[y * (canWidth/2) + x] = {
                     origin: [...posVec],
                     direction: [...normalizedRayDir], 
+                };*/
+                rays.push({
+                    origin: posVec,
+                    direction: normalizedRayDir,
                 });
+        
             }
         }
-    
         return rays;
     }
 
@@ -78,39 +82,42 @@ export class RayCast {
         if (v < 0.0 || u + v > 1.0) {
             return null;
         }
-
         const t = f * vec3.dot(edge2, q);
         const hitPoint = vec3.scaleAndAdd(vec3.create(), ray.origin, ray.direction, t);
-
-        return {
-            point: hitPoint,
-            normal: triangle.normal, 
-        };
+        // console.log(ray.origin, ray.direction, t);
+        
+        if (hitPoint) {
+            if (hitPoint[0] == NaN || hitPoint[1] == NaN || hitPoint[2] == NaN) {
+                return false;
+            }
+            return hitPoint;
+        }
+        return null;
     }
 
     raysIntersectsAABB(ray, aabb) {
-        const t1 = (aabb.min[0] - ray.origin[0]) / ray.direction[0];
-        const t2 = (aabb.max[0] - ray.origin[0]) / ray.direction[0];
+        const t1 = (ray.direction[0] !== 0) ? (aabb.min[0] - ray.origin[0]) / ray.direction[0] : Infinity;
+        const t2 = (ray.direction[0] !== 0) ? (aabb.max[0] - ray.origin[0]) / ray.direction[0] : -Infinity;
 
         const tminX = Math.min(t1, t2);
         const tmaxX = Math.max(t1, t2);
-
-        const t3 = (aabb.min[1] - ray.origin[1]) / ray.direction[1];
-        const t4 = (aabb.max[1] - ray.origin[1]) / ray.direction[1];
+        
+        const t3 = (ray.direction[1] !== 0) ? (aabb.min[1] - ray.origin[1]) / ray.direction[1] : Infinity;
+        const t4 = (ray.direction[1] !== 0) ? (aabb.max[1] - ray.origin[1]) / ray.direction[1] : -Infinity;
 
         const tminY = Math.min(t3, t4);
         const tmaxY = Math.max(t3, t4);
 
-        const t5 = (aabb.min[2] - ray.origin[2]) / ray.direction[2];
-        const t6 = (aabb.max[2] - ray.origin[2]) / ray.direction[2];
+        const t5 = (ray.direction[2] !== 0) ? (aabb.min[2] - ray.origin[2]) / ray.direction[2] : Infinity;
+        const t6 = (ray.direction[2] !== 0) ? (aabb.max[2] - ray.origin[2]) / ray.direction[2] : -Infinity;
 
         const tminZ = Math.min(t5, t6);
         const tmaxZ = Math.max(t5, t6);
 
-        return (
-            tminX <= Math.max(tminY, tminZ) &&
-            Math.min(tmaxX, tmaxY, tmaxZ) <= Math.max(tminX, tminY, tminZ)
-        );
+        var meh = tminX <= Math.max(tminY, tminZ);
+        var meh2 = Math.min(tmaxX, tmaxY, tmaxZ) <= Math.max(tminX, tminY, tminZ);
+
+        return meh && meh2;
     }
 
     rayIntersectsObjects(ray, object) {
@@ -123,16 +130,15 @@ export class RayCast {
 
         const objectAABB = calculateAxisAlignedBoundingBox(object.mesh);
 
-        if (objectAABB && (this.raysIntersectsAABB(ray[0], objectAABB) == false)) {
-            return false;
+        if (object.aabb && (this.raysIntersectsAABB(ray[0], object.aabb) == false)) {
+           return false;
         }
 
         for (const face of object.mesh.faces) {
-            //console.log(face);
-            const intersection = this.rayIntersectsTriangle(ray[0], face, object);
+            var intersection = this.rayIntersectsTriangle(ray[0], face, object);
+            
             if (intersection) {
-                // console.log("Ree");
-                return true;
+               return intersection;
             }
         }
         return false;

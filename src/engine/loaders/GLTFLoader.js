@@ -430,6 +430,21 @@ export class GLTFLoader {
         return camera;
     }
 
+    loadMeshOnNode(node) {
+        const gltfSpec = this.findByNameOrIndex(this.gltf.nodes, node.name);
+
+        // console.log(gltfSpec);
+        if (gltfSpec.mesh !== undefined) {
+            const meshComponent = this.loadMesh(gltfSpec.mesh);
+            node.addComponent(meshComponent);
+
+            node.mesh = meshComponent["primitives"][0]["mesh"];
+            // console.log(node.mesh);
+        }
+
+        return node;
+    }
+
     loadNode(nameOrIndex) {
         const gltfSpec = this.findByNameOrIndex(this.gltf.nodes, nameOrIndex);
         if (!gltfSpec) {
@@ -461,13 +476,15 @@ export class GLTFLoader {
             node.addComponent(meshComponent);
 
             node.mesh = meshComponent["primitives"][0]["mesh"];
+            // console.log(node.mesh);
         }
 
         if (gltfSpec.transform !== undefined) {
-            const transformComponent = new Transform(gltfSpec.transform);
-            node.addComponent(transformComponent);
+            // const transformComponent = new Transform(gltfSpec.transform);
+            // node.addComponent(transformComponent);
+            node.addComponent(new Transform(gltfSpec.transform));
             // If needed, you can access the transformation matrix like this:
-            node.transformationMatrix = transformComponent.calculateTransformationMatrix();
+            // node.transformationMatrix = transformComponent.calculateTransformationMatrix();
         }
 
         this.cache.set(gltfSpec, node);
@@ -499,8 +516,8 @@ export class GLTFLoader {
     removeObjectFromScene(scene, numOfObject) {
         for (let child in scene.children) {
             if (parseInt(child) == numOfObject) {
-                console.log(loader.findByNameOrIndex(scene.children, parseInt(child)));
-                scene.removeChild(loader.findByNameOrIndex(scene.children, parseInt(child)));
+                // console.log(this.findByNameOrIndex(scene.children, parseInt(child)));
+                scene.removeChild(this.findByNameOrIndex(scene.children, parseInt(child)));
             }
         }
     }
