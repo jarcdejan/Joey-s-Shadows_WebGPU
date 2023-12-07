@@ -73,7 +73,6 @@ export class Node {
         }
     }
 
-
     getChildrenByRegex(nameRegex) {
         const children = [];
         for(const child of this.children){
