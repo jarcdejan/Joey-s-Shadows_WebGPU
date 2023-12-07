@@ -72,6 +72,16 @@ export class Node {
                 return child;
         }
     }
+
+    getChildrenByRegex(nameRegex) {
+        const children = [];
+        for(const child of this.children){
+            if(child.name != undefined && child.name.match(nameRegex))
+                children.push(child);
+        }
+        return children;
+    }
+
     getChildrenByMesh(mesh){
         const children = [];
         for(const child of this.children){

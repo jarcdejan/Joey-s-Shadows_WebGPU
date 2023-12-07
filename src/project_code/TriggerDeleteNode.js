@@ -18,17 +18,11 @@ export class TriggerDeleteNode {
     trigger() {
 
         const inventory =  this.player.getComponentOfType(PlayerGameLogic);
-        const battery_mesh = this.scene.getChildByName("Battery").mesh;
-        const pills_mesh = this.scene.getChildByName("Pills").mesh;
-
-        switch(this.node.mesh){
-            //batteries
-            case battery_mesh: inventory.batteries += 1;
-            break;
-            
-            //pills
-            case pills_mesh: inventory.pills += 1;
-            break;
+        
+        if(this.node.name.match(/Battery.*/i)){
+            inventory.batteries += 1;
+        }else if(this.node.name.match(/Pills.*/i)){
+            inventory.pills += 1;
         }
 
         this.scene.removeChild(this.node);
