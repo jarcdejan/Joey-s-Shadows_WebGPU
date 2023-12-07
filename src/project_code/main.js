@@ -51,6 +51,8 @@ await loader.load('../../res/scene/mainScene.gltf');
 const scene = loader.loadScene(loader.defaultScene);
 const camera = loader.loadNode('Camera');
 
+console.log(scene)
+
 const pauseCheck = new Pause(canvas);
 let globalTimer = new Timer();
 

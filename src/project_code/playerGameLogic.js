@@ -1,6 +1,6 @@
 import { FirstPersonController } from "../engine/controllers/FirstPersonController.js";
 import { TriggerSoundEmitter } from "./TriggerSoundEmitter.js";
-import { Transform } from "../engine/core.js";
+import { Transform } from "../engine/core/Transform.js";
 import { Light } from "./Light.js";
 import { ShakingAnimation } from "./shakingAnimation.js";
 import { WalkingSound } from "./WalkingSound.js";

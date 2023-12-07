@@ -4,12 +4,16 @@ import { TriggerSoundEmitter } from './TriggerSoundEmitter.js';
 import { TriggerDeleteNode } from './TriggerDeleteNode.js';
 import { Tripwire } from './Tripwire.js';
 import { WalkingSound } from './WalkingSound.js';
+import { MonsterJumpscare } from './MonsterJumpscare.js';
+import { quat } from '../../../lib/gl-matrix-module.js';
 
 import {
     Node,
     Transform,
 } from '../engine/core.js';
 import { PlayerGameLogic } from './playerGameLogic.js';
+import { ShakingAnimation } from './shakingAnimation.js';
+import { OpenDoor } from './OpenDoor.js';
 
 export async function initScene(scene, camera, light, timer) {
 
@@ -175,6 +179,53 @@ export async function initScene(scene, camera, light, timer) {
         }));
     }
 
+    //create monster tripwires
+    const monsters = scene.getChildrenByRegex(/Monster.*/i)
+    for(const monsterNode of monsters){
+        const transform = monsterNode.getComponentOfType(Transform)
+        monsterNode.addComponent(new MonsterJumpscare({
+            node: monsterNode,
+            playerNode: camera,
+            originalPos: transform.translation,
+        }))
+        console.log(monsterNode.children)
+        monsterNode.addComponent(new ShakingAnimation({
+            node: monsterNode,
+            timer: timer,
+        }))
+        const tripwire = monsterNode.children[0]
+        tripwire.addComponent(new Tripwire({
+            tripwireNode: tripwire,
+            playerNode: camera,
+            marginX: 2,
+            marginZ: 2,
+            repeat: false,
+            triggerNodes: [monsterNode, camera],
+            passObject: {which: "monsterEvent"}
+        }))
+        transform.translation = [transform.translation[0], -10, transform.translation[2]];
+    }
+
+    //init doors
+    const doors = scene.getChildrenByRegex(/Door.*/i)
+    console.log(doors)
+    for(const doorNode of doors){
+        doorNode.addComponent(new Tripwire({
+            tripwireNode: doorNode,
+            playerNode: camera,
+            marginX: 2,
+            marginZ: 2,
+            repeat: false,
+            triggerNodes: [doorNode],
+        }));
+        doorNode.addComponent(new OpenDoor({
+            node: doorNode,
+            timer: timer,
+            startRotation: [0,0,0,1],
+            endRotation: quat.fromEuler(quat.create(), 0, 0, -90),
+            duration: 1000,
+        }));
+    }
 
     //position of item interaction sounds in relation to player
     const itemSoundTranslation = [0, -0.2, -0.2];
