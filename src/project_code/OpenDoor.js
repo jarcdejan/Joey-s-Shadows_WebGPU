@@ -25,7 +25,6 @@ export class OpenDoor {
             const transform = this.node.getComponentOfType(Transform);
 
             quat.slerp(transform.rotation, this.startRotation, this.endRotation, EasingFunctions.polyEaseInOut(time));
-            console.log("aaa")
 
         }
     }

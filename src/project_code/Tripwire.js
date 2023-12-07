@@ -1,5 +1,6 @@
 import { vec3, mat4 } from '../../../lib/gl-matrix-module.js';
 import { getGlobalModelMatrix } from '../engine/core/SceneUtils.js';
+import { PlayerGameLogic } from './playerGameLogic.js';
 
 export class Tripwire {
 
@@ -13,6 +14,7 @@ export class Tripwire {
         cooldown = 0,
         triggerNodes,
         timer,
+        checkForKey = false,
     } = {}) {
         this.tripwireNode = tripwireNode;
         this.playerNode = playerNode;
@@ -26,6 +28,8 @@ export class Tripwire {
         this.triggered = false;
         this.remainingTime = cooldown;
         this.timer = timer;
+
+        this.checkForKey = checkForKey;
     }
 
     update() {
@@ -49,6 +53,9 @@ export class Tripwire {
         let player = mat4.getTranslation(vec3.create(), getGlobalModelMatrix(this.playerNode));
 
         if(Math.abs(tripwire[0]-player[0]) < this.marginX && Math.abs(tripwire[2]-player[2]) <this.marginZ){
+            if(this.checkForKey && this.playerNode.getComponentOfType(PlayerGameLogic).keyes <= 0){
+                return;
+            }
             this.triggered = true;
             for(const node of this.triggerNodes){
                 for (const component of node.components) {

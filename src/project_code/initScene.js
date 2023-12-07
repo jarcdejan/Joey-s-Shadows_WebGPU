@@ -217,6 +217,7 @@ export async function initScene(scene, camera, light, timer) {
             marginZ: 2,
             repeat: false,
             triggerNodes: [doorNode],
+            checkForKey: true,
         }));
         doorNode.addComponent(new OpenDoor({
             node: doorNode,
