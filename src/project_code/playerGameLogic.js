@@ -12,12 +12,13 @@ export class PlayerGameLogic {
         light,
         domElement,
         timer,
+        scene,
         maxSanity = 100,
         sanityLoss1 = 1,
         sanityLoss2 = 3,
 
-        batteries = 2,
-        pills = 2,
+        batteries = 1,
+        pills = 0,
         keyes = 0,
     } = {}) {
 
@@ -27,6 +28,7 @@ export class PlayerGameLogic {
         this.itemSoundNodes = null;
         this.domElement = domElement;
         this.timer = timer;
+        this.scene = scene;
 
         this.keys = {};
 

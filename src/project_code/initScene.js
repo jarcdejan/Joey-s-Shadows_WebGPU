@@ -1,6 +1,7 @@
 import { SoundListener } from './SoundListener.js'
 import { RepeatingSoundEmitter } from './RepeatingSoundEmitter.js';
 import { TriggerSoundEmitter } from './TriggerSoundEmitter.js';
+import { TriggerDeleteNode } from './TriggerDeleteNode.js';
 import { Tripwire } from './Tripwire.js';
 import { WalkingSound } from './WalkingSound.js';
 
@@ -84,7 +85,6 @@ export async function initScene(scene, camera, light, timer) {
     }));
     scene.addChild(tripwireNode);
 
-
     //create tripwire for monster event
     const tripwireNode1 = new Node();
     tripwireNode1.addComponent(new Transform({
@@ -115,14 +115,71 @@ export async function initScene(scene, camera, light, timer) {
     }));
     scene.addChild(tripwireNode2);
 
-    
+    //Load sound for battery pickup
+    const soundFileBattery1 = await fetch('../../res/sounds/pick-up-battery.mp3');
+    const arrayBufferBattery1 = await soundFileBattery1.arrayBuffer();
+    const audioBufferBattery1 = await audioCtx.decodeAudioData(arrayBufferBattery1);
+
+    //Load sound for pills pickup
+    const soundFilePills1 = await fetch('../../res/sounds/pick-up-pills.mp3');
+    const arrayBufferPills1 = await soundFilePills1.arrayBuffer();
+    const audioBufferPills1 = await audioCtx.decodeAudioData(arrayBufferPills1);
+
+    //create battery tripwire
+    const battery_mesh = scene.getChildByName("Battery").mesh;
+    const batteries = scene.getChildrenByMesh(battery_mesh); //battery mesh
+    for(const item of batteries){
+        item.addComponent(new Tripwire({
+            tripwireNode: item,
+            playerNode: camera,
+            triggerNodes: [item],
+            repeat: false,
+        }));
+        //Deleting scene node
+        item.addComponent(new TriggerDeleteNode({
+            node: item,
+            scene: scene,
+            player: camera,
+        }));
+        //Emmitting a sound
+        item.addComponent(new TriggerSoundEmitter({
+            node: item,
+            audioCtx,
+            audioBuffer: audioBufferBattery1,
+            gain: 2,
+        }));
+    }
+
+    //create pills tripwire
+    const pills_mesh = scene.getChildByName("Pills").mesh;
+    const pills = scene.getChildrenByMesh(pills_mesh); //pills mesh
+    for(const item of pills){
+        item.addComponent(new Tripwire({
+            tripwireNode: item,
+            playerNode: camera,
+            triggerNodes: [item],
+            repeat: false,
+        }));
+        //Deleting scene node
+        item.addComponent(new TriggerDeleteNode({
+            node: item,
+            scene: scene,
+            player: camera,
+        }));
+        //Emmitting a sound
+        item.addComponent(new TriggerSoundEmitter({
+            node: item,
+            audioCtx,
+            audioBuffer: audioBufferPills1,
+            gain: 2,
+        }));
+    }
+
+
     //position of item interaction sounds in relation to player
     const itemSoundTranslation = [0, -0.2, -0.2];
 
     //create node for battery pickup sound
-    const soundFileBattery1 = await fetch('../../res/sounds/pick-up-battery.mp3');
-    const arrayBufferBattery1 = await soundFileBattery1.arrayBuffer();
-    const audioBufferBattery1 = await audioCtx.decodeAudioData(arrayBufferBattery1);
     const soundNodeBattery1 = new Node();
     soundNodeBattery1.addComponent(new TriggerSoundEmitter({
         node: soundNodeBattery1,
@@ -152,9 +209,6 @@ export async function initScene(scene, camera, light, timer) {
     camera.addChild(soundNodeBattery2);
 
     //create node for pills pickup sound
-    const soundFilePills1 = await fetch('../../res/sounds/pick-up-pills.mp3');
-    const arrayBufferPills1 = await soundFilePills1.arrayBuffer();
-    const audioBufferPills1 = await audioCtx.decodeAudioData(arrayBufferPills1);
     const soundNodePills1 = new Node();
     soundNodePills1.addComponent(new TriggerSoundEmitter({
         node: soundNodePills1,
