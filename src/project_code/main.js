@@ -46,7 +46,7 @@ const renderer = new Renderer(canvas);
 await renderer.initialize();
 
 const loader = new GLTFLoader();
-await loader.load('../../res/scene/mainScene6.gltf');
+await loader.load('../../res/scene/mainScene.gltf');
 
 const scene = loader.loadScene(loader.defaultScene);
 const camera = loader.loadNode('Camera');

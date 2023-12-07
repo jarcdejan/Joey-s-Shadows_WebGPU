@@ -4198,7 +4198,7 @@
 			"extensions":{
 				"KHR_materials_unlit":{}
 			},
-			"name":"Monster",
+			"name":"White",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
 					"index":0,
@@ -4213,7 +4213,7 @@
 			"extensions":{
 				"KHR_materials_unlit":{}
 			},
-			"name":"Material",
+			"name":"Monster",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
 					"index":1,
@@ -4228,7 +4228,7 @@
 			"extensions":{
 				"KHR_materials_unlit":{}
 			},
-			"name":"Material.001",
+			"name":"Material",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
 					"index":2,
@@ -4243,7 +4243,7 @@
 			"extensions":{
 				"KHR_materials_unlit":{}
 			},
-			"name":"Door",
+			"name":"Material.001",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
 					"index":3,
@@ -4255,10 +4255,25 @@
 		},
 		{
 			"doubleSided":true,
+			"extensions":{
+				"KHR_materials_unlit":{}
+			},
+			"name":"Door",
+			"pbrMetallicRoughness":{
+				"baseColorTexture":{
+					"index":4,
+					"texCoord":0
+				},
+				"metallicFactor":0,
+				"roughnessFactor":0.9
+			}
+		},
+		{
+			"doubleSided":true,
 			"name":"Exit",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
-					"index":4
+					"index":5
 				},
 				"metallicFactor":0,
 				"roughnessFactor":0.5
@@ -4269,7 +4284,7 @@
 			"name":"Material.002",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
-					"index":5
+					"index":6
 				},
 				"metallicFactor":0,
 				"roughnessFactor":0.5
@@ -4281,21 +4296,6 @@
 				"KHR_materials_unlit":{}
 			},
 			"name":"PillCap.001",
-			"pbrMetallicRoughness":{
-				"baseColorTexture":{
-					"index":6,
-					"texCoord":0
-				},
-				"metallicFactor":0,
-				"roughnessFactor":0.9
-			}
-		},
-		{
-			"doubleSided":true,
-			"extensions":{
-				"KHR_materials_unlit":{}
-			},
-			"name":"PillBase",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
 					"index":7,
@@ -4310,7 +4310,7 @@
 			"extensions":{
 				"KHR_materials_unlit":{}
 			},
-			"name":"Ceiling",
+			"name":"PillBase",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
 					"index":8,
@@ -4325,7 +4325,7 @@
 			"extensions":{
 				"KHR_materials_unlit":{}
 			},
-			"name":"Box",
+			"name":"Ceiling",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
 					"index":9,
@@ -4340,7 +4340,7 @@
 			"extensions":{
 				"KHR_materials_unlit":{}
 			},
-			"name":"Floor.004",
+			"name":"Box",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
 					"index":10,
@@ -4355,7 +4355,7 @@
 			"extensions":{
 				"KHR_materials_unlit":{}
 			},
-			"name":"Wall",
+			"name":"Floor.004",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
 					"index":11,
@@ -4367,18 +4367,22 @@
 		},
 		{
 			"doubleSided":true,
-			"name":"Material.004",
+			"extensions":{
+				"KHR_materials_unlit":{}
+			},
+			"name":"Wall",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
-					"index":12
+					"index":12,
+					"texCoord":0
 				},
 				"metallicFactor":0,
-				"roughnessFactor":0.5
+				"roughnessFactor":0.9
 			}
 		},
 		{
 			"doubleSided":true,
-			"name":"Bedding.004",
+			"name":"Material.004",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
 					"index":13
@@ -4389,7 +4393,7 @@
 		},
 		{
 			"doubleSided":true,
-			"name":"BedSupport.004",
+			"name":"Bedding.004",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
 					"index":14
@@ -4400,7 +4404,7 @@
 		},
 		{
 			"doubleSided":true,
-			"name":"BedRubber.004",
+			"name":"BedSupport.004",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
 					"index":15
@@ -4411,7 +4415,7 @@
 		},
 		{
 			"doubleSided":true,
-			"name":"BedBase.004",
+			"name":"BedRubber.004",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
 					"index":16
@@ -4422,7 +4426,7 @@
 		},
 		{
 			"doubleSided":true,
-			"name":"Chair",
+			"name":"BedBase.004",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
 					"index":17
@@ -4433,10 +4437,21 @@
 		},
 		{
 			"doubleSided":true,
-			"name":"Material.005",
+			"name":"Chair",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
 					"index":18
+				},
+				"metallicFactor":0,
+				"roughnessFactor":0.5
+			}
+		},
+		{
+			"doubleSided":true,
+			"name":"Material.005",
+			"pbrMetallicRoughness":{
+				"baseColorTexture":{
+					"index":19
 				},
 				"metallicFactor":0,
 				"roughnessFactor":0.5
@@ -4453,7 +4468,8 @@
 						"NORMAL":1,
 						"TEXCOORD_0":2
 					},
-					"indices":3
+					"indices":3,
+					"material":0
 				}
 			]
 		},
@@ -4467,7 +4483,7 @@
 						"TEXCOORD_0":6
 					},
 					"indices":7,
-					"material":0
+					"material":1
 				}
 			]
 		},
@@ -4481,7 +4497,7 @@
 						"TEXCOORD_0":10
 					},
 					"indices":11,
-					"material":1
+					"material":2
 				}
 			]
 		},
@@ -4495,7 +4511,7 @@
 						"TEXCOORD_0":14
 					},
 					"indices":15,
-					"material":2
+					"material":3
 				}
 			]
 		},
@@ -4509,7 +4525,7 @@
 						"TEXCOORD_0":18
 					},
 					"indices":19,
-					"material":3
+					"material":4
 				}
 			]
 		},
@@ -4523,7 +4539,7 @@
 						"TEXCOORD_0":22
 					},
 					"indices":23,
-					"material":4
+					"material":5
 				}
 			]
 		},
@@ -4537,7 +4553,7 @@
 						"TEXCOORD_0":26
 					},
 					"indices":27,
-					"material":5
+					"material":6
 				}
 			]
 		},
@@ -4551,7 +4567,7 @@
 						"TEXCOORD_0":30
 					},
 					"indices":31,
-					"material":6
+					"material":7
 				}
 			]
 		},
@@ -4565,7 +4581,7 @@
 						"TEXCOORD_0":34
 					},
 					"indices":31,
-					"material":6
+					"material":7
 				}
 			]
 		},
@@ -4579,7 +4595,7 @@
 						"TEXCOORD_0":37
 					},
 					"indices":31,
-					"material":6
+					"material":7
 				}
 			]
 		},
@@ -4593,7 +4609,7 @@
 						"TEXCOORD_0":40
 					},
 					"indices":31,
-					"material":7
+					"material":8
 				}
 			]
 		},
@@ -4607,7 +4623,7 @@
 						"TEXCOORD_0":43
 					},
 					"indices":23,
-					"material":8
+					"material":9
 				}
 			]
 		},
@@ -4621,7 +4637,7 @@
 						"TEXCOORD_0":46
 					},
 					"indices":47,
-					"material":9
+					"material":10
 				}
 			]
 		},
@@ -4635,7 +4651,7 @@
 						"TEXCOORD_0":50
 					},
 					"indices":47,
-					"material":9
+					"material":10
 				}
 			]
 		},
@@ -4649,7 +4665,7 @@
 						"TEXCOORD_0":53
 					},
 					"indices":47,
-					"material":9
+					"material":10
 				}
 			]
 		},
@@ -4663,7 +4679,7 @@
 						"TEXCOORD_0":56
 					},
 					"indices":47,
-					"material":9
+					"material":10
 				}
 			]
 		},
@@ -4677,7 +4693,7 @@
 						"TEXCOORD_0":59
 					},
 					"indices":47,
-					"material":9
+					"material":10
 				}
 			]
 		},
@@ -4691,7 +4707,7 @@
 						"TEXCOORD_0":62
 					},
 					"indices":47,
-					"material":9
+					"material":10
 				}
 			]
 		},
@@ -4705,7 +4721,7 @@
 						"TEXCOORD_0":65
 					},
 					"indices":47,
-					"material":9
+					"material":10
 				}
 			]
 		},
@@ -4719,7 +4735,7 @@
 						"TEXCOORD_0":68
 					},
 					"indices":47,
-					"material":9
+					"material":10
 				}
 			]
 		},
@@ -4733,7 +4749,7 @@
 						"TEXCOORD_0":71
 					},
 					"indices":47,
-					"material":9
+					"material":10
 				}
 			]
 		},
@@ -4747,7 +4763,7 @@
 						"TEXCOORD_0":74
 					},
 					"indices":47,
-					"material":9
+					"material":10
 				}
 			]
 		},
@@ -4761,7 +4777,7 @@
 						"TEXCOORD_0":77
 					},
 					"indices":47,
-					"material":9
+					"material":10
 				}
 			]
 		},
@@ -4775,7 +4791,7 @@
 						"TEXCOORD_0":80
 					},
 					"indices":47,
-					"material":9
+					"material":10
 				}
 			]
 		},
@@ -4789,7 +4805,7 @@
 						"TEXCOORD_0":83
 					},
 					"indices":47,
-					"material":9
+					"material":10
 				}
 			]
 		},
@@ -4803,7 +4819,7 @@
 						"TEXCOORD_0":86
 					},
 					"indices":47,
-					"material":9
+					"material":10
 				}
 			]
 		},
@@ -4817,7 +4833,7 @@
 						"TEXCOORD_0":89
 					},
 					"indices":47,
-					"material":9
+					"material":10
 				}
 			]
 		},
@@ -4831,7 +4847,7 @@
 						"TEXCOORD_0":92
 					},
 					"indices":47,
-					"material":9
+					"material":10
 				}
 			]
 		},
@@ -4845,7 +4861,7 @@
 						"TEXCOORD_0":95
 					},
 					"indices":47,
-					"material":9
+					"material":10
 				}
 			]
 		},
@@ -4859,7 +4875,7 @@
 						"TEXCOORD_0":98
 					},
 					"indices":47,
-					"material":9
+					"material":10
 				}
 			]
 		},
@@ -4873,7 +4889,7 @@
 						"TEXCOORD_0":101
 					},
 					"indices":47,
-					"material":9
+					"material":10
 				}
 			]
 		},
@@ -4887,7 +4903,7 @@
 						"TEXCOORD_0":104
 					},
 					"indices":47,
-					"material":9
+					"material":10
 				}
 			]
 		},
@@ -4901,7 +4917,7 @@
 						"TEXCOORD_0":107
 					},
 					"indices":47,
-					"material":9
+					"material":10
 				}
 			]
 		},
@@ -4915,7 +4931,7 @@
 						"TEXCOORD_0":110
 					},
 					"indices":47,
-					"material":9
+					"material":10
 				}
 			]
 		},
@@ -4929,7 +4945,7 @@
 						"TEXCOORD_0":113
 					},
 					"indices":47,
-					"material":9
+					"material":10
 				}
 			]
 		},
@@ -4943,7 +4959,7 @@
 						"TEXCOORD_0":116
 					},
 					"indices":47,
-					"material":9
+					"material":10
 				}
 			]
 		},
@@ -4957,7 +4973,7 @@
 						"TEXCOORD_0":119
 					},
 					"indices":47,
-					"material":9
+					"material":10
 				}
 			]
 		},
@@ -4971,7 +4987,7 @@
 						"TEXCOORD_0":122
 					},
 					"indices":47,
-					"material":9
+					"material":10
 				}
 			]
 		},
@@ -4985,7 +5001,7 @@
 						"TEXCOORD_0":125
 					},
 					"indices":47,
-					"material":9
+					"material":10
 				}
 			]
 		},
@@ -4999,7 +5015,7 @@
 						"TEXCOORD_0":128
 					},
 					"indices":47,
-					"material":9
+					"material":10
 				}
 			]
 		},
@@ -5013,7 +5029,7 @@
 						"TEXCOORD_0":131
 					},
 					"indices":47,
-					"material":9
+					"material":10
 				}
 			]
 		},
@@ -5027,7 +5043,7 @@
 						"TEXCOORD_0":134
 					},
 					"indices":47,
-					"material":9
+					"material":10
 				}
 			]
 		},
@@ -5041,7 +5057,7 @@
 						"TEXCOORD_0":137
 					},
 					"indices":47,
-					"material":9
+					"material":10
 				}
 			]
 		},
@@ -5055,7 +5071,7 @@
 						"TEXCOORD_0":140
 					},
 					"indices":47,
-					"material":9
+					"material":10
 				}
 			]
 		},
@@ -5069,7 +5085,7 @@
 						"TEXCOORD_0":143
 					},
 					"indices":47,
-					"material":9
+					"material":10
 				}
 			]
 		},
@@ -5083,7 +5099,7 @@
 						"TEXCOORD_0":146
 					},
 					"indices":23,
-					"material":10
+					"material":11
 				}
 			]
 		},
@@ -5097,7 +5113,7 @@
 						"TEXCOORD_0":149
 					},
 					"indices":150,
-					"material":11
+					"material":12
 				}
 			]
 		},
@@ -5111,7 +5127,7 @@
 						"TEXCOORD_0":153
 					},
 					"indices":150,
-					"material":11
+					"material":12
 				}
 			]
 		},
@@ -5125,7 +5141,7 @@
 						"TEXCOORD_0":156
 					},
 					"indices":150,
-					"material":11
+					"material":12
 				}
 			]
 		},
@@ -5139,7 +5155,7 @@
 						"TEXCOORD_0":159
 					},
 					"indices":160,
-					"material":11
+					"material":12
 				}
 			]
 		},
@@ -5153,7 +5169,7 @@
 						"TEXCOORD_0":163
 					},
 					"indices":150,
-					"material":11
+					"material":12
 				}
 			]
 		},
@@ -5167,7 +5183,7 @@
 						"TEXCOORD_0":166
 					},
 					"indices":150,
-					"material":11
+					"material":12
 				}
 			]
 		},
@@ -5181,7 +5197,7 @@
 						"TEXCOORD_0":169
 					},
 					"indices":150,
-					"material":11
+					"material":12
 				}
 			]
 		},
@@ -5195,7 +5211,7 @@
 						"TEXCOORD_0":172
 					},
 					"indices":150,
-					"material":11
+					"material":12
 				}
 			]
 		},
@@ -5209,7 +5225,7 @@
 						"TEXCOORD_0":175
 					},
 					"indices":150,
-					"material":11
+					"material":12
 				}
 			]
 		},
@@ -5223,7 +5239,7 @@
 						"TEXCOORD_0":178
 					},
 					"indices":150,
-					"material":11
+					"material":12
 				}
 			]
 		},
@@ -5237,7 +5253,7 @@
 						"TEXCOORD_0":181
 					},
 					"indices":150,
-					"material":11
+					"material":12
 				}
 			]
 		},
@@ -5251,7 +5267,7 @@
 						"TEXCOORD_0":184
 					},
 					"indices":150,
-					"material":11
+					"material":12
 				}
 			]
 		},
@@ -5265,7 +5281,7 @@
 						"TEXCOORD_0":187
 					},
 					"indices":150,
-					"material":11
+					"material":12
 				}
 			]
 		},
@@ -5279,7 +5295,7 @@
 						"TEXCOORD_0":190
 					},
 					"indices":150,
-					"material":11
+					"material":12
 				}
 			]
 		},
@@ -5293,7 +5309,7 @@
 						"TEXCOORD_0":193
 					},
 					"indices":150,
-					"material":11
+					"material":12
 				}
 			]
 		},
@@ -5307,7 +5323,7 @@
 						"TEXCOORD_0":196
 					},
 					"indices":150,
-					"material":11
+					"material":12
 				}
 			]
 		},
@@ -5321,7 +5337,7 @@
 						"TEXCOORD_0":199
 					},
 					"indices":150,
-					"material":11
+					"material":12
 				}
 			]
 		},
@@ -5335,7 +5351,7 @@
 						"TEXCOORD_0":202
 					},
 					"indices":150,
-					"material":11
+					"material":12
 				}
 			]
 		},
@@ -5349,7 +5365,7 @@
 						"TEXCOORD_0":205
 					},
 					"indices":150,
-					"material":11
+					"material":12
 				}
 			]
 		},
@@ -5363,7 +5379,7 @@
 						"TEXCOORD_0":208
 					},
 					"indices":150,
-					"material":11
+					"material":12
 				}
 			]
 		},
@@ -5377,7 +5393,7 @@
 						"TEXCOORD_0":211
 					},
 					"indices":150,
-					"material":11
+					"material":12
 				}
 			]
 		},
@@ -5391,7 +5407,7 @@
 						"TEXCOORD_0":214
 					},
 					"indices":150,
-					"material":11
+					"material":12
 				}
 			]
 		},
@@ -5405,7 +5421,7 @@
 						"TEXCOORD_0":217
 					},
 					"indices":150,
-					"material":11
+					"material":12
 				}
 			]
 		},
@@ -5419,7 +5435,7 @@
 						"TEXCOORD_0":220
 					},
 					"indices":221,
-					"material":12
+					"material":13
 				}
 			]
 		},
@@ -5433,7 +5449,7 @@
 						"TEXCOORD_0":224
 					},
 					"indices":47,
-					"material":13
+					"material":14
 				}
 			]
 		},
@@ -5447,7 +5463,7 @@
 						"TEXCOORD_0":227
 					},
 					"indices":228,
-					"material":14
+					"material":15
 				}
 			]
 		},
@@ -5461,7 +5477,7 @@
 						"TEXCOORD_0":231
 					},
 					"indices":31,
-					"material":14
+					"material":15
 				}
 			]
 		},
@@ -5475,7 +5491,7 @@
 						"TEXCOORD_0":234
 					},
 					"indices":31,
-					"material":15
+					"material":16
 				}
 			]
 		},
@@ -5489,7 +5505,7 @@
 						"TEXCOORD_0":237
 					},
 					"indices":47,
-					"material":16
+					"material":17
 				}
 			]
 		},
@@ -5503,7 +5519,7 @@
 						"TEXCOORD_0":240
 					},
 					"indices":241,
-					"material":17
+					"material":18
 				}
 			]
 		},
@@ -5517,7 +5533,7 @@
 						"TEXCOORD_0":244
 					},
 					"indices":245,
-					"material":18
+					"material":19
 				}
 			]
 		}
@@ -5533,7 +5549,7 @@
 		},
 		{
 			"sampler":0,
-			"source":1
+			"source":2
 		},
 		{
 			"sampler":0,
@@ -5585,11 +5601,15 @@
 		},
 		{
 			"sampler":0,
+			"source":0
+		},
+		{
+			"sampler":0,
 			"source":14
 		},
 		{
 			"sampler":0,
-			"source":13
+			"source":0
 		},
 		{
 			"sampler":0,
@@ -5601,6 +5621,11 @@
 		}
 	],
 	"images":[
+		{
+			"mimeType":"image/jpeg",
+			"name":"white",
+			"uri":"white.jpg"
+		},
 		{
 			"mimeType":"image/jpeg",
 			"name":"character_texture",
@@ -5665,11 +5690,6 @@
 			"mimeType":"image/jpeg",
 			"name":"blue_bedding",
 			"uri":"blue_bedding.jpg"
-		},
-		{
-			"mimeType":"image/jpeg",
-			"name":"white",
-			"uri":"white.jpg"
 		},
 		{
 			"mimeType":"image/jpeg",
