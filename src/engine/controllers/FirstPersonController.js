@@ -50,7 +50,13 @@ export class FirstPersonController {
             } else {
                 doc.removeEventListener('pointermove', this.pointermoveHandler);
             }
+
+            this.keys['KeyW'] = false;
+            this.keys['KeyA'] = false;
+            this.keys['KeyS'] = false;
+            this.keys['KeyD'] = false;
         });
+
     }
 
     update(t, dt) {
