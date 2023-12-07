@@ -46,7 +46,7 @@ const renderer = new Renderer(canvas);
 await renderer.initialize();
 
 const loader = new GLTFLoader();
-await loader.load('../../res/scene/mainScene.gltf');
+await loader.load('../../res/scene/mainScene6.gltf');
 
 const scene = loader.loadScene(loader.defaultScene);
 const camera = loader.loadNode('Camera');
@@ -57,8 +57,8 @@ let globalTimer = new Timer();
 camera.addComponent(new FirstPersonController(camera, canvas));
 camera.isDynamic = true;
 camera.aabb = {
-    min: [-0.2, -0.8, -0.6],
-    max: [0.4, 0.8, 0.6],
+    min: [-0.4, -1.5, -0.4],
+    max: [0.4, 0.6, 0.4],
 };
 
 // Collision and physics in the scene
@@ -89,7 +89,7 @@ light.addComponent(new Light({
 }));
 camera.addChild(light);
 
-camera.addComponent(new PlayerGameLogic({node: camera, light: light ,timer: globalTimer, domElement: canvas}));
+camera.addComponent(new PlayerGameLogic({node: camera, light: light ,timer: globalTimer, domElement: canvas, scene: scene}));
 camera.addComponent(new ShakingAnimation({node: camera, timer: globalTimer}));
 
 await initScene(scene, camera, light, globalTimer);
