@@ -1,8 +1,8 @@
 # Joey-s-Shadows
 
-Ta repozitorij predstavlja izvorno kodo in vse teksture, modele ipd., ki se nanašajo na Joey's Shadows.
+Ta repozitorij predstavlja izvorno kodo in vse teksture, modele ipd., ki se nanašajo na **Joey's Shadows**.
 
-**Joey's Shadows** je projektna naloga študentov 3. letnika FRI in ALUO v sklopu predmetov za računalniško grafiko, tehnologijo iger in grafično oblikovanje.
+***Joey's Shadows*** je projektna naloga študentov 3. letnika FRI in ALUO v sklopu predmetov za računalniško grafiko, tehnologijo iger in grafično oblikovanje.
 
 Ekipa:
 
