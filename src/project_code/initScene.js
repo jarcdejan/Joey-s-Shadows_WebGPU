@@ -2,6 +2,7 @@ import { SoundListener } from './SoundListener.js'
 import { RepeatingSoundEmitter } from './RepeatingSoundEmitter.js';
 import { TriggerSoundEmitter } from './TriggerSoundEmitter.js';
 import { TriggerDeleteNode } from './TriggerDeleteNode.js';
+import { TriggerPickupNode } from './TriggerPickupNode.js';
 import { Tripwire } from './Tripwire.js';
 import { WalkingSound } from './WalkingSound.js';
 import { MonsterJumpscare } from './MonsterJumpscare.js';
@@ -15,7 +16,7 @@ import { PlayerGameLogic } from './playerGameLogic.js';
 import { ShakingAnimation } from './shakingAnimation.js';
 import { OpenDoor } from './OpenDoor.js';
 
-export async function initScene(scene, camera, light, timer) {
+export async function initScene(scene, camera, light, timer, document) {
 
     //init audio components
     const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -92,10 +93,15 @@ export async function initScene(scene, camera, light, timer) {
     const arrayBufferKey1 = await soundFileKey1.arrayBuffer();
     const audioBufferKey1 = await audioCtx.decodeAudioData(arrayBufferKey1);
     
-    //Load jumpscare sound node
+    //Load sound jumpscare
     const soundFileMonster = await fetch('../../res/sounds/jumpscare.mp3');
     const arrayBufferMonster = await soundFileMonster.arrayBuffer();
     const audioBufferMonster = await audioCtx.decodeAudioData(arrayBufferMonster);
+
+    //Load sound for paper pickup
+    const soundFilePaper = await fetch('../../res/sounds/handle-paper-foley-1.mp3');
+    const arrayBufferPaper = await soundFilePaper.arrayBuffer();
+    const audioBufferPaper = await audioCtx.decodeAudioData(arrayBufferPaper);
     
     //create battery tripwire
     const battery_mesh = scene.getChildByName("Battery").mesh;
@@ -207,36 +213,31 @@ export async function initScene(scene, camera, light, timer) {
         transform.translation = [transform.translation[0], -10, transform.translation[2]];
     }
 
-    /*
-    //create tripwire for the jumpscare sound node
-    const tripwireNode = new Node();
-    tripwireNode.addComponent(new Transform({
-        translation: [5,0,5],
-    }));
-    tripwireNode.addComponent(new Tripwire({
-        tripwireNode: tripwireNode,
-        playerNode: camera,
-        triggerNodes: [soundNode1],
-        timer,
-        cooldown: 10 * 1000,
-    }));
-    scene.addChild(tripwireNode);
+    //create paper tripwire
+    const papers = scene.getChildrenByRegex(/Paper.*/i)
+    for(const item of papers){
+        item.addComponent(new Tripwire({
+            tripwireNode: item,
+            playerNode: camera,
+            triggerNodes: [item],
+            repeat: false,
+        }));
+        //Pickup node
+        item.addComponent(new TriggerPickupNode({
+            node: item,
+            scene: scene,
+            player: camera,
+            document: document
+        }));
+        //Emmitting a sound
+        item.addComponent(new TriggerSoundEmitter({
+            node: item,
+            audioCtx,
+            audioBuffer: audioBufferPaper,
+            gain: 2,
+        }));
+    }
 
-    //create tripwire for monster event
-    const tripwireNode1 = new Node();
-    tripwireNode1.addComponent(new Transform({
-        translation: [0,0,-5],
-    }));
-    tripwireNode1.addComponent(new Tripwire({
-        tripwireNode: tripwireNode1,
-        playerNode: camera,
-        triggerNodes: [soundNode1, camera],
-        passObject: {which: "monsterEvent"},
-        timer,
-        repeat: false,
-    }));
-    scene.addChild(tripwireNode1);
-    */
     //init doors
     const doors = scene.getChildrenByRegex(/Door.*/i)
     //console.log(doors)

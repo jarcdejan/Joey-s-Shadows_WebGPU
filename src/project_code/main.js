@@ -94,7 +94,7 @@ camera.addChild(light);
 camera.addComponent(new PlayerGameLogic({node: camera, light: light ,timer: globalTimer, domElement: canvas, scene: scene}));
 camera.addComponent(new ShakingAnimation({node: camera, timer: globalTimer}));
 
-await initScene(scene, camera, light, globalTimer);
+await initScene(scene, camera, light, globalTimer, canvas.ownerDocument);
 
 
 //initialize all 2D components of game
