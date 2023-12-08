@@ -36,9 +36,7 @@ export class MonsterJumpscare {
         const monsterPos = mat4.getTranslation(vec3.create(), getGlobalModelMatrix(this.node));
         const playerPos = mat4.getTranslation(vec3.create(), getGlobalModelMatrix(this.playerNode));
         const direct = vec3.normalize(vec3.create(), vec3.subtract(vec3.create(), playerPos, monsterPos));
-        const rotation = quat.fromEuler(quat.create(), 0, Math.asin(direct[0]) * 180/Math.PI, 0);
-        this.node.getComponentOfType(Transform).rotation = rotation;
-
+        
         this.node.getComponentOfType(ShakingAnimation)?.start();
         this.node.getComponentOfType(LoopSound)?.start();
 
