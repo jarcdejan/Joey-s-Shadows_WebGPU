@@ -94,7 +94,11 @@ camera.addChild(light);
 camera.addComponent(new PlayerGameLogic({node: camera, light: light ,timer: globalTimer, domElement: canvas, scene: scene}));
 camera.addComponent(new ShakingAnimation({node: camera, timer: globalTimer}));
 
-await initScene(scene, camera, light, globalTimer);
+//init audio components
+const AudioContext = window.AudioContext || window.webkitAudioContext;
+const audioCtx = new AudioContext();
+
+await initScene(scene, audioCtx, camera, light, globalTimer, canvas.ownerDocument, pauseCheck);
 
 
 //initialize all 2D components of game
@@ -127,14 +131,26 @@ function update(t, dt) {
     }
 
     if(camera.getComponentOfType(PlayerGameLogic).dead){
+        if (audioCtx.state === "running") {
+            audioCtx.suspend();
+        }
         for(const element of deathLayout){
             element?.update();
         }
         return;
     }
 
-    if(pauseCheck.paused)
+    if(pauseCheck.paused){
+        if (audioCtx.state === "running") {
+            audioCtx.suspend();
+        }
         return;
+    }
+    else {
+        if (audioCtx.state === "suspended") {
+            audioCtx.resume()
+        }
+    }
 
 
     scene.traverse(node => {

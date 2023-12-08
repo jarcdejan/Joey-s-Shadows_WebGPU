@@ -4,6 +4,7 @@ import { Transform } from "../engine/core/Transform.js";
 import { Light } from "./Light.js";
 import { ShakingAnimation } from "./shakingAnimation.js";
 import { WalkingSound } from "./WalkingSound.js";
+import { LoopSound } from "./LoopSound.js";
 
 export class PlayerGameLogic {
 
@@ -26,6 +27,7 @@ export class PlayerGameLogic {
         this.light = light;
         this.walkingSoundNode = null;
         this.itemSoundNodes = null;
+        this.voicesSoundNode = null;
         this.domElement = domElement;
         this.timer = timer;
         this.scene = scene;
@@ -53,11 +55,11 @@ export class PlayerGameLogic {
         this.dead = false;
         this.won = false;
 
-        this.initHandlers();
+        this.init();
 
     }
 
-    initHandlers() {
+    init() {
         this.keydownHandler = this.keydownHandler.bind(this);
 
         const element = this.domElement;
@@ -186,6 +188,15 @@ export class PlayerGameLogic {
                 this.sanity -= this.sanityLoss1;
                 this.sanityLossCooldown1 = 1000
             }
+        }
+
+
+        //set gain for voices
+        if(this.sanity < 70){
+            this.voicesSoundNode.getComponentOfType(LoopSound).gainVal = 1.5 * (Math.exp(3 * (1-this.sanity/70)) - 1) / (Math.exp(3) - 1);
+        }
+        else{
+            this.voicesSoundNode.getComponentOfType(LoopSound).gainVal = 0;
         }
 
         //reset all key states
