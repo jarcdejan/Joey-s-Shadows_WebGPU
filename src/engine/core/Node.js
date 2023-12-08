@@ -66,4 +66,29 @@ export class Node {
         return this.components.filter(component => component instanceof type);
     }
 
+    getChildByName(nodeName){
+        for(const child of this.children){
+            if(child.name == nodeName)
+                return child;
+        }
+    }
+
+    getChildrenByRegex(nameRegex) {
+        const children = [];
+        for(const child of this.children){
+            if(child.name != undefined && child.name.match(nameRegex))
+                children.push(child);
+        }
+        return children;
+    }
+
+    getChildrenByMesh(mesh){
+        const children = [];
+        for(const child of this.children){
+            if(child.mesh == mesh)
+                children.push(child);
+        }
+        return children;
+    }
+
 }
