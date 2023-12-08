@@ -1,16 +1,17 @@
-import { mat4, vec3, quat } from "../../lib/gl-matrix-module.js";
+import { mat4, mat3, vec3, quat } from "../../lib/gl-matrix-module.js";
 import { Transform } from "../engine/core.js";
 import { PlayerGameLogic } from "./playerGameLogic.js"; 
 import { getGlobalModelMatrix } from "../engine/core/SceneUtils.js";
 import { ShakingAnimation } from "./shakingAnimation.js";
 import { LoopSound } from "./LoopSound.js";
 
+
 export class MonsterJumpscare {
 
     constructor({
         node,
         playerNode,
-        originalPos
+        originalPos,
     } = {}) {
 
         this.node = node;
@@ -19,13 +20,13 @@ export class MonsterJumpscare {
     }
 
     update() {
-        if(this.checkForEnd){
+        if(this.active){
             if(!this.playerNode.getComponentOfType(PlayerGameLogic).monsterEvent){
                 const transform = this.node.getComponentOfType(Transform)
                 transform.translation = [transform.translation[0], -10, transform.translation[2]];
                 this.node.getComponentOfType(ShakingAnimation)?.stop();
                 this.node.getComponentOfType(LoopSound)?.stop();
-                this.checkForEnd = false;
+                this.active = false;
             }
         } 
     }
@@ -33,6 +34,7 @@ export class MonsterJumpscare {
     trigger() {
         this.node.getComponentOfType(Transform).translation = this.originalPos;
 
+        //point moster in the direction of player
         const monsterPos = mat4.getTranslation(vec3.create(), getGlobalModelMatrix(this.node));
         const playerPos = mat4.getTranslation(vec3.create(), getGlobalModelMatrix(this.playerNode));
         const direct = vec3.normalize(vec3.create(), vec3.subtract(vec3.create(), playerPos, monsterPos));
@@ -40,7 +42,7 @@ export class MonsterJumpscare {
         this.node.getComponentOfType(ShakingAnimation)?.start();
         this.node.getComponentOfType(LoopSound)?.start();
 
-        this.checkForEnd = true;
+        this.active = true;
     }
 
 }

@@ -195,6 +195,9 @@ export class PlayerGameLogic {
         if(this.sanity < 70){
             this.voicesSoundNode.getComponentOfType(LoopSound).gainVal = 1.5 * (Math.exp(3 * (1-this.sanity/70)) - 1) / (Math.exp(3) - 1);
         }
+        else{
+            this.voicesSoundNode.getComponentOfType(LoopSound).gainVal = 0;
+        }
 
         //reset all key states
         this.keys["KeyQ"] = false;
