@@ -43,24 +43,25 @@ export async function initScene(scene, audioCtx, camera, light, timer, document,
         gain: 0.5,
     }))
 
-    //create random whispering node
+    //add voices to the player
     const soundFileWhisper = await fetch('../../res/sounds/whispering.mp3');
     const arrayBufferWhisper = await soundFileWhisper.arrayBuffer();
     const audioBufferWhisper = await audioCtx.decodeAudioData(arrayBufferWhisper);
-    const soundNode = new Node();
-    soundNode.addComponent(new RepeatingSoundEmitter({
-        node: soundNode,
-        audioCtx,
-        audioBufferWhisper,
-        timer,
-    }));
-    soundNode.addComponent(new Transform({
-        translation: [5,0,5],
-    }));
-    // TODO - Fix whisper for insane player :)
-    scene.addChild(soundNode);
 
-    
+    const voicesNode = new Node();
+    voicesNode.addComponent(new Transform({
+        translation: [0,0,2],
+    }));
+    voicesNode.addComponent(new LoopSound({
+        node: voicesNode,
+        audioCtx,
+        audioBuffer: audioBufferWhisper,
+        gain: 0,
+        player: camera,
+    }));
+    voicesNode.getComponentOfType(LoopSound).start();
+    camera.addChild(voicesNode);
+    camera.getComponentOfType(PlayerGameLogic).voicesSoundNode = voicesNode;
     
     //create victory tripwire
     const tripwireNode2 = new Node();

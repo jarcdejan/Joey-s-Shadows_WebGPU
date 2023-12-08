@@ -7,7 +7,6 @@ export class LoopSound {
     constructor({
         node,
         audioCtx,
-        pause,
         player,
         panningModel = "HRTF",
         distanceModel = "linear",
@@ -20,7 +19,6 @@ export class LoopSound {
 
         this.node = node;
         this.playerNode = player;
-        this.pause = pause;
 
         this.panner = new PannerNode(audioCtx, {
             panningModel,
@@ -49,6 +47,8 @@ export class LoopSound {
     update() {
         if(!this.active)
             return;
+
+        this.gain.gain.value = this.gainVal
 
         if(this.playerNode.getComponentOfType(PlayerGameLogic).dead){
             this.source.stop();
