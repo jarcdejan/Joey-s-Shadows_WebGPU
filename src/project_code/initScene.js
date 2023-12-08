@@ -102,6 +102,11 @@ export async function initScene(scene, camera, light, timer, document) {
     const soundFilePaper = await fetch('../../res/sounds/handle-paper-foley-1.mp3');
     const arrayBufferPaper = await soundFilePaper.arrayBuffer();
     const audioBufferPaper = await audioCtx.decodeAudioData(arrayBufferPaper);
+
+    //Load sound for paper putdown
+    const soundFilePaper2 = await fetch('../../res/sounds/handle-paper-foley-2.mp3');
+    const arrayBufferPaper2 = await soundFilePaper2.arrayBuffer();
+    const audioBufferPaper2 = await audioCtx.decodeAudioData(arrayBufferPaper2);
     
     //create battery tripwire
     const battery_mesh = scene.getChildByName("Battery").mesh;
@@ -221,20 +226,24 @@ export async function initScene(scene, camera, light, timer, document) {
             playerNode: camera,
             triggerNodes: [item],
             repeat: false,
+            marginX: 1.3,
+            marginZ: 1.3,
         }));
         //Pickup node
         item.addComponent(new TriggerPickupNode({
             node: item,
             scene: scene,
             player: camera,
-            document: document
+            document: document,
+            audioCtx: audioCtx,
+            audioBufferPutDown: audioBufferPaper2,
         }));
         //Emmitting a sound
         item.addComponent(new TriggerSoundEmitter({
             node: item,
             audioCtx,
             audioBuffer: audioBufferPaper,
-            gain: 2,
+            gain: 1,
         }));
     }
 
