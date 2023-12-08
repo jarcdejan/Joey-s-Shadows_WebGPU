@@ -51,7 +51,7 @@ await loader.load('../../res/scene/mainScene.gltf');
 const scene = loader.loadScene(loader.defaultScene);
 const camera = loader.loadNode('Camera');
 
-console.log(scene)
+//console.log(scene)
 
 const pauseCheck = new Pause(canvas);
 let globalTimer = new Timer();
@@ -59,7 +59,7 @@ let globalTimer = new Timer();
 camera.addComponent(new FirstPersonController(camera, canvas));
 camera.isDynamic = true;
 camera.aabb = {
-    min: [-0.4, -1.5, -0.4],
+    min: [-0.4, -1.9, -0.4],
     max: [0.4, 0.6, 0.4],
 };
 

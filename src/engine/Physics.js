@@ -75,10 +75,11 @@ export class Physics {
             minDiff = diffa[0];
             minDirection = [minDiff, 0, 0];
         }
+        /*
         if (diffa[1] >= 0 && diffa[1] < minDiff) {
             minDiff = diffa[1];
             minDirection = [0, minDiff, 0];
-        }
+        }*/
         if (diffa[2] >= 0 && diffa[2] < minDiff) {
             minDiff = diffa[2];
             minDirection = [0, 0, minDiff];
@@ -87,10 +88,12 @@ export class Physics {
             minDiff = diffb[0];
             minDirection = [-minDiff, 0, 0];
         }
+        /*
         if (diffb[1] >= 0 && diffb[1] < minDiff) {
             minDiff = diffb[1];
             minDirection = [0, -minDiff, 0];
         }
+        */
         if (diffb[2] >= 0 && diffb[2] < minDiff) {
             minDiff = diffb[2];
             minDirection = [0, 0, -minDiff];

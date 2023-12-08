@@ -23,6 +23,8 @@ export class TriggerDeleteNode {
             inventory.batteries += 1;
         }else if(this.node.name.match(/Pills.*/i)){
             inventory.pills += 1;
+        }else if(this.node.name.match(/Key.*/i)){
+            inventory.keyes += 1;
         }
 
         this.scene.removeChild(this.node);

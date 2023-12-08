@@ -44,70 +44,28 @@ export async function initScene(scene, camera, light, timer) {
     }))
 
     //create random whispering node
-    const soundFile = await fetch('../../res/sounds/whispering.mp3');
-    const arrayBuffer = await soundFile.arrayBuffer();
-    const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+    const soundFileWhisper = await fetch('../../res/sounds/whispering.mp3');
+    const arrayBufferWhisper = await soundFileWhisper.arrayBuffer();
+    const audioBufferWhisper = await audioCtx.decodeAudioData(arrayBufferWhisper);
     const soundNode = new Node();
     soundNode.addComponent(new RepeatingSoundEmitter({
         node: soundNode,
         audioCtx,
-        audioBuffer,
+        audioBufferWhisper,
         timer,
     }));
     soundNode.addComponent(new Transform({
         translation: [5,0,5],
     }));
+    // TODO - Fix whisper for insane player :)
     scene.addChild(soundNode);
 
-    //create jumpscare sound node
-    const soundFile1 = await fetch('../../res/sounds/jumpscare.mp3');
-    const arrayBuffer1 = await soundFile1.arrayBuffer();
-    const audioBuffer1 = await audioCtx.decodeAudioData(arrayBuffer1);
-    const soundNode1 = new Node();
-    soundNode1.addComponent(new TriggerSoundEmitter({
-        node: soundNode1,
-        audioCtx,
-        audioBuffer: audioBuffer1,
-        gain: 0.1,
-    }));
-    soundNode1.addComponent(new Transform({
-        translation: [5,0,5],
-    }));
-    scene.addChild(soundNode1);
-
-    //create tripwire for the jumpscare sound node
-    const tripwireNode = new Node();
-    tripwireNode.addComponent(new Transform({
-        translation: [5,0,5],
-    }));
-    tripwireNode.addComponent(new Tripwire({
-        tripwireNode: tripwireNode,
-        playerNode: camera,
-        triggerNodes: [soundNode1],
-        timer,
-        cooldown: 10 * 1000,
-    }));
-    scene.addChild(tripwireNode);
-
-    //create tripwire for monster event
-    const tripwireNode1 = new Node();
-    tripwireNode1.addComponent(new Transform({
-        translation: [0,0,-5],
-    }));
-    tripwireNode1.addComponent(new Tripwire({
-        tripwireNode: tripwireNode1,
-        playerNode: camera,
-        triggerNodes: [soundNode1, camera],
-        passObject: {which: "monsterEvent"},
-        timer,
-        repeat: false,
-    }));
-    scene.addChild(tripwireNode1);
-
+    
+    
     //create victory tripwire
     const tripwireNode2 = new Node();
     tripwireNode2.addComponent(new Transform({
-        translation: [12,0,14],
+        translation: [-20,0,40],
     }));
     tripwireNode2.addComponent(new Tripwire({
         tripwireNode: tripwireNode2,
@@ -129,6 +87,16 @@ export async function initScene(scene, camera, light, timer) {
     const arrayBufferPills1 = await soundFilePills1.arrayBuffer();
     const audioBufferPills1 = await audioCtx.decodeAudioData(arrayBufferPills1);
 
+    //Load sound for keys pickup
+    const soundFileKey1 = await fetch('../../res/sounds/pick-up-key.mp3');
+    const arrayBufferKey1 = await soundFileKey1.arrayBuffer();
+    const audioBufferKey1 = await audioCtx.decodeAudioData(arrayBufferKey1);
+    
+    //Load jumpscare sound node
+    const soundFileMonster = await fetch('../../res/sounds/jumpscare.mp3');
+    const arrayBufferMonster = await soundFileMonster.arrayBuffer();
+    const audioBufferMonster = await audioCtx.decodeAudioData(arrayBufferMonster);
+    
     //create battery tripwire
     const battery_mesh = scene.getChildByName("Battery").mesh;
     const batteries = scene.getChildrenByMesh(battery_mesh); //battery mesh
@@ -179,6 +147,31 @@ export async function initScene(scene, camera, light, timer) {
         }));
     }
 
+    //create key tripwire
+    const key_mesh = scene.getChildByName("Key").mesh;
+    const keyes = scene.getChildrenByMesh(key_mesh); //key mesh
+    for(const item of keyes){
+        item.addComponent(new Tripwire({
+            tripwireNode: item,
+            playerNode: camera,
+            triggerNodes: [item],
+            repeat: false,
+        }));
+        //Deleting scene node
+        item.addComponent(new TriggerDeleteNode({
+            node: item,
+            scene: scene,
+            player: camera,
+        }));
+        //Emmitting a sound
+        item.addComponent(new TriggerSoundEmitter({
+            node: item,
+            audioCtx,
+            audioBuffer: audioBufferKey1,
+            gain: 2,
+        }));
+    }
+
     //create monster tripwires
     const monsters = scene.getChildrenByRegex(/Monster.*/i)
     for(const monsterNode of monsters){
@@ -187,12 +180,20 @@ export async function initScene(scene, camera, light, timer) {
             node: monsterNode,
             playerNode: camera,
             originalPos: transform.translation,
-        }))
-        console.log(monsterNode.children)
+        }));
+        //console.log(monsterNode.children)
         monsterNode.addComponent(new ShakingAnimation({
             node: monsterNode,
             timer: timer,
-        }))
+        }));
+
+        monsterNode.addComponent(new TriggerSoundEmitter({
+            node: monsterNode,
+            audioCtx,
+            audioBuffer: audioBufferMonster,
+            gain: 0.3,
+        }));
+
         const tripwire = monsterNode.children[0]
         tripwire.addComponent(new Tripwire({
             tripwireNode: tripwire,
@@ -202,13 +203,43 @@ export async function initScene(scene, camera, light, timer) {
             repeat: false,
             triggerNodes: [monsterNode, camera],
             passObject: {which: "monsterEvent"}
-        }))
+        }));
         transform.translation = [transform.translation[0], -10, transform.translation[2]];
     }
 
+    /*
+    //create tripwire for the jumpscare sound node
+    const tripwireNode = new Node();
+    tripwireNode.addComponent(new Transform({
+        translation: [5,0,5],
+    }));
+    tripwireNode.addComponent(new Tripwire({
+        tripwireNode: tripwireNode,
+        playerNode: camera,
+        triggerNodes: [soundNode1],
+        timer,
+        cooldown: 10 * 1000,
+    }));
+    scene.addChild(tripwireNode);
+
+    //create tripwire for monster event
+    const tripwireNode1 = new Node();
+    tripwireNode1.addComponent(new Transform({
+        translation: [0,0,-5],
+    }));
+    tripwireNode1.addComponent(new Tripwire({
+        tripwireNode: tripwireNode1,
+        playerNode: camera,
+        triggerNodes: [soundNode1, camera],
+        passObject: {which: "monsterEvent"},
+        timer,
+        repeat: false,
+    }));
+    scene.addChild(tripwireNode1);
+    */
     //init doors
     const doors = scene.getChildrenByRegex(/Door.*/i)
-    console.log(doors)
+    //console.log(doors)
     for(const doorNode of doors){
         doorNode.addComponent(new Tripwire({
             tripwireNode: doorNode,
@@ -243,6 +274,19 @@ export async function initScene(scene, camera, light, timer) {
         translation: itemSoundTranslation,
     }));
     camera.addChild(soundNodeBattery1);
+
+    //create node for keys pickup sound
+    const soundNodeKey1 = new Node();
+    soundNodeKey1.addComponent(new TriggerSoundEmitter({
+        node: soundNodeKey1,
+        audioCtx,
+        audioBuffer: audioBufferKey1,
+        gain: 2,
+    }));
+    soundNodeKey1.addComponent(new Transform({
+        translation: itemSoundTranslation,
+    }));
+    camera.addChild(soundNodeKey1);
 
     //create node for battery use sound
     const soundFileBattery2 = await fetch('../../res/sounds/insert-battery.mp3');
@@ -288,22 +332,6 @@ export async function initScene(scene, camera, light, timer) {
         translation: itemSoundTranslation,
     }));
     camera.addChild(soundNodePills2);
-
-    //create node for pills use sound
-    const soundFileKey1 = await fetch('../../res/sounds/pick-up-key.mp3');
-    const arrayBufferKey1 = await soundFileKey1.arrayBuffer();
-    const audioBufferKey1 = await audioCtx.decodeAudioData(arrayBufferKey1);
-    const soundNodeKey1 = new Node();
-    soundNodeKey1.addComponent(new TriggerSoundEmitter({
-        node: soundNodeKey1,
-        audioCtx,
-        audioBuffer: audioBufferKey1,
-        gain: 2,
-    }));
-    soundNodeKey1.addComponent(new Transform({
-        translation: itemSoundTranslation,
-    }));
-    camera.addChild(soundNodeKey1);
 
     //create node for error sound
     const soundFileError = await fetch('../../res/sounds/error.mp3');
