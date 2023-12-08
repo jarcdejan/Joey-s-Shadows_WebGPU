@@ -3,6 +3,7 @@ import { Transform } from "../engine/core.js";
 import { PlayerGameLogic } from "./playerGameLogic.js"; 
 import { getGlobalModelMatrix } from "../engine/core/SceneUtils.js";
 import { ShakingAnimation } from "./shakingAnimation.js";
+import { LoopSound } from "./LoopSound.js";
 
 export class MonsterJumpscare {
 
@@ -22,7 +23,8 @@ export class MonsterJumpscare {
             if(!this.playerNode.getComponentOfType(PlayerGameLogic).monsterEvent){
                 const transform = this.node.getComponentOfType(Transform)
                 transform.translation = [transform.translation[0], -10, transform.translation[2]];
-                this.node.getComponentOfType(ShakingAnimation).stop();
+                this.node.getComponentOfType(ShakingAnimation)?.stop();
+                this.node.getComponentOfType(LoopSound)?.stop();
                 this.checkForEnd = false;
             }
         } 
@@ -37,7 +39,8 @@ export class MonsterJumpscare {
         const rotation = quat.fromEuler(quat.create(), 0, Math.asin(direct[0]) * 180/Math.PI, 0);
         this.node.getComponentOfType(Transform).rotation = rotation;
 
-        this.node.getComponentOfType(ShakingAnimation).start();
+        this.node.getComponentOfType(ShakingAnimation)?.start();
+        this.node.getComponentOfType(LoopSound)?.start();
 
         this.checkForEnd = true;
     }

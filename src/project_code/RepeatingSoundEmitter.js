@@ -15,12 +15,14 @@ export class RepeatingSoundEmitter {
         audioBuffer,
         cooldown = 30 * 1000,
         gain = 1,
+        loop = false,
     } = {}) {
 
         this.node = node;
         this.cooldown = cooldown;
         this.remainingTime = cooldown;
         this.timer = timer;
+        this.loop = loop;
 
         this.panner = new PannerNode(audioCtx, {
             panningModel,

@@ -19,7 +19,7 @@ export class PlayerGameLogic {
 
         batteries = 1,
         pills = 0,
-        keyes = 0,
+        keyes = 1,
     } = {}) {
 
         this.node = node;

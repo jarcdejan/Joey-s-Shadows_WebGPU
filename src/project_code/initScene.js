@@ -15,14 +15,13 @@ import {
 import { PlayerGameLogic } from './playerGameLogic.js';
 import { ShakingAnimation } from './shakingAnimation.js';
 import { OpenDoor } from './OpenDoor.js';
+import { LoopSound } from './LoopSound.js';
 
-export async function initScene(scene, camera, light, timer, document) {
+export async function initScene(scene, audioCtx, camera, light, timer, document, pause) {
 
-    //init audio components
-    const AudioContext = window.AudioContext || window.webkitAudioContext;
-    const audioCtx = new AudioContext();
+
+    //audio listener node
     const listener = audioCtx.listener;
-
     const listenerNode = new Node();
     listenerNode.addComponent(new SoundListener({
         node: listenerNode,
@@ -97,6 +96,11 @@ export async function initScene(scene, camera, light, timer, document) {
     const soundFileMonster = await fetch('../../res/sounds/jumpscare.mp3');
     const arrayBufferMonster = await soundFileMonster.arrayBuffer();
     const audioBufferMonster = await audioCtx.decodeAudioData(arrayBufferMonster);
+
+    //monster encouter loop sound
+    const soundFileMonsterLoop = await fetch('../../res/sounds/scaryviolins.mp3');
+    const arrayBufferMonsterLoop = await soundFileMonsterLoop.arrayBuffer();
+    const audioBufferMonsterLoop = await audioCtx.decodeAudioData(arrayBufferMonsterLoop);
 
     //Load sound for paper pickup
     const soundFilePaper = await fetch('../../res/sounds/handle-paper-foley-1.mp3');
@@ -200,6 +204,15 @@ export async function initScene(scene, camera, light, timer, document) {
             gain: 0.3,
         }));
 
+        monsterNode.addComponent(new LoopSound({
+            node: monsterNode,
+            audioCtx,
+            audioBuffer: audioBufferMonsterLoop,
+            gain: 2,
+            pause: pause,
+            player: camera,
+        }));
+
         const tripwire = monsterNode.children[0]
         tripwire.addComponent(new Tripwire({
             tripwireNode: tripwire,
@@ -238,6 +251,11 @@ export async function initScene(scene, camera, light, timer, document) {
         }));
     }
 
+    //unlock sound
+    const soundFileUnlock = await fetch('../../res/sounds/keys-unlocking-door.mp3');
+    const arrayBufferUnlock = await soundFileUnlock.arrayBuffer();
+    const audioBufferUnlock = await audioCtx.decodeAudioData(arrayBufferUnlock);
+
     //init doors
     const doors = scene.getChildrenByRegex(/Door.*/i)
     //console.log(doors)
@@ -257,6 +275,12 @@ export async function initScene(scene, camera, light, timer, document) {
             startRotation: [0,0,0,1],
             endRotation: quat.fromEuler(quat.create(), 0, 0, -90),
             duration: 1000,
+        }));
+        doorNode.addComponent(new TriggerSoundEmitter({
+            node: doorNode,
+            audioCtx,
+            audioBuffer: audioBufferUnlock,
+            gain: 2,
         }));
     }
 
