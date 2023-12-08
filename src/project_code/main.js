@@ -2,7 +2,7 @@ import { ResizeSystem } from '../engine/systems/ResizeSystem.js';
 import { UpdateSystem } from '../engine/systems/UpdateSystem.js';
 
 import { GLTFLoader } from '../engine/loaders/GLTFLoader.js';
-import { UnlitRenderer } from '../engine/renderers/UnlitRenderer.js';
+//import { UnlitRenderer } from '../engine/renderers/UnlitRenderer.js';
 import { TurntableController } from '../engine/controllers/TurntableController.js';
 import { getGlobalModelMatrix } from '../engine/core/SceneUtils.js';
 import { FirstPersonController } from '../engine/controllers/FirstPersonController.js';
