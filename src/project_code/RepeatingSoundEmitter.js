@@ -13,16 +13,16 @@ export class RepeatingSoundEmitter {
         refDistance = 1,
         rollOff = 10,
         audioBuffer,
-        cooldown = 30 * 1000,
+        minCooldown = 10 * 1000,
+        maxCooldown = 60 * 1000,
         gain = 1,
-        loop = false,
     } = {}) {
 
         this.node = node;
-        this.cooldown = cooldown;
-        this.remainingTime = cooldown;
+        this.minCooldown = minCooldown;
+        this.maxCooldown = maxCooldown;
+        this.remainingTime = Math.floor(Math.random() * (maxCooldown - minCooldown + 1) + minCooldown)
         this.timer = timer;
-        this.loop = loop;
 
         this.panner = new PannerNode(audioCtx, {
             panningModel,
@@ -64,7 +64,7 @@ export class RepeatingSoundEmitter {
             source.connect(this.panner).connect(this.gain).connect(this.audioCtx.destination);
             source.start();
             this.playing = true;
-            this.remainingTime = this.cooldown;
+            this.remainingTime = Math.floor(Math.random() * (this.maxCooldown - this.minCooldown + 1) + this.minCooldown);
             source.addEventListener("ended", e =>{
                 this.playing = false;
             });

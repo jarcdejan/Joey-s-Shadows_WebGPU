@@ -48,6 +48,10 @@ export async function initScene(scene, audioCtx, camera, light, timer, document,
     const arrayBufferWhisper = await soundFileWhisper.arrayBuffer();
     const audioBufferWhisper = await audioCtx.decodeAudioData(arrayBufferWhisper);
 
+    const soundFileDisappear = await fetch('../../res/sounds/breath-stinger.mp3');
+    const arrayBufferDisappear = await soundFileDisappear.arrayBuffer();
+    const audioBufferDisappear = await audioCtx.decodeAudioData(arrayBufferDisappear);
+
     const voicesNode = new Node();
     voicesNode.addComponent(new Transform({
         translation: [0,0,2],
@@ -59,6 +63,12 @@ export async function initScene(scene, audioCtx, camera, light, timer, document,
         gain: 0,
         player: camera,
     }));
+    voicesNode.addComponent(new TriggerSoundEmitter({
+        node: voicesNode,
+        audioCtx,
+        audioBuffer: audioBufferDisappear,
+        gain: 0.6,
+    }))
     voicesNode.getComponentOfType(LoopSound).start();
     camera.addChild(voicesNode);
     camera.getComponentOfType(PlayerGameLogic).voicesSoundNode = voicesNode;
@@ -425,4 +435,95 @@ export async function initScene(scene, audioCtx, camera, light, timer, document,
     camera.addChild(walkingSoundNode)
     camera.getComponentOfType(PlayerGameLogic).walkingSoundNode = walkingSoundNode;
 
+
+    //create some ambient sounds
+    const soundFileAmbient1 = await fetch('../../res/sounds/horror-sound-fx-ambient.mp3');
+    const arrayBufferAmbient1 = await soundFileAmbient1.arrayBuffer();
+    const audioBufferAmbient1 = await audioCtx.decodeAudioData(arrayBufferAmbient1);
+    const ambientSoundNode1 = new Node();
+    ambientSoundNode1.addComponent(new Transform({
+        translation: [-37, 6, -19],
+    }));
+    ambientSoundNode1.addComponent(new RepeatingSoundEmitter({
+        node: ambientSoundNode1,
+        audioCtx: audioCtx,
+        timer: timer,
+        audioBuffer: audioBufferAmbient1,
+        minCooldown: 20 * 1000,
+        maxCooldown: 120 * 1000,
+        gain: 0.5,
+    }));
+    scene.addChild(ambientSoundNode1);
+
+    const soundFileAmbient2 = await fetch('../../res/sounds/creepy-music-box.mp3');
+    const arrayBufferAmbient2 = await soundFileAmbient2.arrayBuffer();
+    const audioBufferAmbient2 = await audioCtx.decodeAudioData(arrayBufferAmbient2);
+    const ambientSoundNode2 = new Node();
+    ambientSoundNode2.addComponent(new Transform({
+        translation: [20, 10, -27],
+    }));
+    ambientSoundNode2.addComponent(new RepeatingSoundEmitter({
+        node: ambientSoundNode2,
+        audioCtx: audioCtx,
+        timer: timer,
+        audioBuffer: audioBufferAmbient2,
+        minCooldown: 30 * 1000,
+        maxCooldown: 240 * 1000,
+        gain: 0.2,
+    }));
+    scene.addChild(ambientSoundNode2);
+
+    const soundFileAmbient3 = await fetch('../../res/sounds/horror-vocal-scream-woman.mp3');
+    const arrayBufferAmbient3 = await soundFileAmbient3.arrayBuffer();
+    const audioBufferAmbient3 = await audioCtx.decodeAudioData(arrayBufferAmbient3);
+    const ambientSoundNode3 = new Node();
+    ambientSoundNode3.addComponent(new Transform({
+        translation: [-20, 2, -30],
+    }));
+    ambientSoundNode3.addComponent(new RepeatingSoundEmitter({
+        node: ambientSoundNode3,
+        audioCtx: audioCtx,
+        timer: timer,
+        audioBuffer: audioBufferAmbient3,
+        minCooldown: 60 * 1000,
+        maxCooldown: 360 * 1000,
+        gain: 1,
+    }));
+    scene.addChild(ambientSoundNode3);
+
+    const soundFileAmbient4 = await fetch('../../res/sounds/horror-voice-flashbacks1.mp3');
+    const arrayBufferAmbient4 = await soundFileAmbient4.arrayBuffer();
+    const audioBufferAmbient4 = await audioCtx.decodeAudioData(arrayBufferAmbient4);
+    const ambientSoundNode4 = new Node();
+    ambientSoundNode3.addComponent(new Transform({
+        translation: [0, 2, 0],
+    }));
+    ambientSoundNode4.addComponent(new RepeatingSoundEmitter({
+        node: ambientSoundNode4,
+        audioCtx: audioCtx,
+        timer: timer,
+        audioBuffer: audioBufferAmbient4,
+        minCooldown: 40 * 1000,
+        maxCooldown: 220 * 1000,
+        gain: 0.3,
+    }));
+    scene.addChild(ambientSoundNode4);
+
+    const soundFileAmbient5 = await fetch('../../res/sounds/horror-voice-flashbacks2.mp3');
+    const arrayBufferAmbient5 = await soundFileAmbient5.arrayBuffer();
+    const audioBufferAmbient5 = await audioCtx.decodeAudioData(arrayBufferAmbient5);
+    const ambientSoundNode5 = new Node();
+    ambientSoundNode5.addComponent(new Transform({
+        translation: [40, -20, -40],
+    }));
+    ambientSoundNode5.addComponent(new RepeatingSoundEmitter({
+        node: ambientSoundNode5,
+        audioCtx: audioCtx,
+        timer: timer,
+        audioBuffer: audioBufferAmbient5,
+        minCooldown: 30 * 1000,
+        maxCooldown: 280 * 1000,
+        gain: 0.3,
+    }));
+    scene.addChild(ambientSoundNode5);
 }
