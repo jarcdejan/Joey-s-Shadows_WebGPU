@@ -16,7 +16,7 @@ export class PlayerGameLogic {
         scene,
         maxSanity = 100,
         sanityLoss1 = 1,
-        sanityLoss2 = 3,
+        sanityLoss2 = 4,
 
         batteries = 1,
         pills = 0,
@@ -43,14 +43,14 @@ export class PlayerGameLogic {
 
         this.batteryPercentage = 1;
         this.lightOn = true;
-        this.lightWorkingTime = 60 * 1000;
+        this.lightWorkingTime = 120 * 1000;
 
         this.batteries = batteries;
         this.pills = pills;
         this.keyes = keyes;
 
         this.monsterEvent = false;
-        this.quicktimeGoal = 100;
+        this.quicktimeGoal = 80;
 
         this.dead = false;
         this.won = false;
@@ -130,7 +130,9 @@ export class PlayerGameLogic {
     }
 
     update() {
+        
         //console.log(this.node.getComponentOfType(Transform).translation)
+
         if(this.won)
             console.log("victory");
         if(this.dead)
@@ -168,6 +170,7 @@ export class PlayerGameLogic {
                 this.node.getComponentOfType(FirstPersonController).rooted = false;
                 this.walkingSoundNode.getComponentOfType(WalkingSound).disabled = false;
                 this.node.getComponentOfType(ShakingAnimation).stop();
+                this.voicesSoundNode.getComponentOfType(TriggerSoundEmitter).trigger();
             }
         }
 
