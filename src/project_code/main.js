@@ -124,6 +124,15 @@ uiRenderer.init();
 //set timer before first loop
 globalTimer.update();
 
+//Key listener
+document.addEventListener("mousedown", e => {
+    
+    if(camera.getComponentOfType(PlayerGameLogic).won || camera.getComponentOfType(PlayerGameLogic).dead){
+        location.reload();
+    }
+
+});
+
 function update(t, dt) {
 
     globalTimer.update();
