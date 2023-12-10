@@ -10,7 +10,12 @@ import {
     Texture,
     Transform,
     Vertex,
+    calculateAxisAlignedBoundingBox,
+    calculateFaceNormals,
+    transformMesh,
 } from '../core.js';
+
+import { quat, vec3, vec4, mat3, mat4 } from '../../../lib/gl-matrix-module.js';
 
 // TODO: GLB support
 // TODO: accessors with no buffer views (zero-initialized)
@@ -384,8 +389,8 @@ export class GLTFLoader {
         }
 
         const model = new Model({ primitives });
-
         this.cache.set(gltfSpec, model);
+        // console.log(model);
         return model;
     }
 
@@ -425,6 +430,21 @@ export class GLTFLoader {
         return camera;
     }
 
+    loadMeshOnNode(node) {
+        const gltfSpec = this.findByNameOrIndex(this.gltf.nodes, node.name);
+
+        // console.log(gltfSpec);
+        if (gltfSpec.mesh !== undefined) {
+            const meshComponent = this.loadMesh(gltfSpec.mesh);
+            node.addComponent(meshComponent);
+
+            node.mesh = meshComponent["primitives"][0]["mesh"];
+            // console.log(node.mesh);
+        }
+
+        return node;
+    }
+
     loadNode(nameOrIndex) {
         const gltfSpec = this.findByNameOrIndex(this.gltf.nodes, nameOrIndex);
         if (!gltfSpec) {
@@ -434,7 +454,7 @@ export class GLTFLoader {
             return this.cache.get(gltfSpec);
         }
 
-        const node = new Node();
+        const node = new Node(nameOrIndex);
 
         if(gltfSpec.name !== undefined)
             node.name = gltfSpec.name
@@ -454,7 +474,19 @@ export class GLTFLoader {
         }
 
         if (gltfSpec.mesh !== undefined) {
-            node.addComponent(this.loadMesh(gltfSpec.mesh));
+            const meshComponent = this.loadMesh(gltfSpec.mesh);
+            node.addComponent(meshComponent);
+
+            node.mesh = meshComponent["primitives"][0]["mesh"];
+            // console.log(node.mesh);
+        }
+
+        if (gltfSpec.transform !== undefined) {
+            // const transformComponent = new Transform(gltfSpec.transform);
+            // node.addComponent(transformComponent);
+            node.addComponent(new Transform(gltfSpec.transform));
+            // If needed, you can access the transformation matrix like this:
+            // node.transformationMatrix = transformComponent.calculateTransformationMatrix();
         }
 
         this.cache.set(gltfSpec, node);
@@ -470,15 +502,26 @@ export class GLTFLoader {
             return this.cache.get(gltfSpec);
         }
 
-        const scene = new Node();
+        const scene = new Node(nameOrIndex);
         if (gltfSpec.nodes) {
             for (const nodeIndex of gltfSpec.nodes) {
+                // console.log(this.loadNode(nodeIndex).name);
                 scene.addChild(this.loadNode(nodeIndex));
             }
         }
 
         this.cache.set(gltfSpec, scene);
         return scene;
+    }
+
+    // find the child in the scene that corelates with a given index and removes it
+    removeObjectFromScene(scene, numOfObject) {
+        for (let child in scene.children) {
+            if (parseInt(child) == numOfObject) {
+                // console.log(this.findByNameOrIndex(scene.children, parseInt(child)));
+                scene.removeChild(this.findByNameOrIndex(scene.children, parseInt(child)));
+            }
+        }
     }
 
 }
