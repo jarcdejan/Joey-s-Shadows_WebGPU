@@ -2,20 +2,29 @@ import { ResizeSystem } from '../engine/systems/ResizeSystem.js';
 import { UpdateSystem } from '../engine/systems/UpdateSystem.js';
 
 import { GLTFLoader } from '../engine/loaders/GLTFLoader.js';
-import { Renderer } from './Renderer.js';
+import { UnlitRenderer } from '../engine/renderers/UnlitRenderer.js';
+import { TurntableController } from '../engine/controllers/TurntableController.js';
+import { getGlobalModelMatrix } from '../engine/core/SceneUtils.js';
 import { FirstPersonController } from '../engine/controllers/FirstPersonController.js';
 
+import {
+    calculateAxisAlignedBoundingBox,
+    mergeAxisAlignedBoundingBoxes,
+} from '../engine/core/MeshUtils.js';
+
+import { Physics } from '../engine/Physics.js';
+
+import { Renderer } from './Renderer.js';
+
 import { Light } from './Light.js';
-import { SoundListener } from './SoundListener.js';
-import { RepeatingSoundEmitter } from './RepeatingSoundEmitter.js';
-import { TriggerSoundEmitter } from './TriggerSoundEmitter.js';
-import { Tripwire } from './Tripwire.js';
 
+import { UILayoutLoader } from './UIcode/UILayoutLoader.js';
+import { UIRenderer } from './UIcode/UIRenderer.js';
 
-import { 
-    Camera, 
-    Model,
+import {
+    Camera,
     Material,
+    Model,
     Node,
     Primitive,
     Sampler,
@@ -23,53 +32,42 @@ import {
     Transform,
 } from '../engine/core.js';
 import { initScene } from './initScene.js';
-import {
-    calculateAxisAlignedBoundingBox,
-    mergeAxisAlignedBoundingBoxes,
-} from '../engine/core/MeshUtils.js';
+import { RotateAnimator } from '../engine/animators/RotateAnimator.js';
+import { Pause } from './pause.js';
+import { PauseLayoutLoader } from './UIcode/PauseLayoutLoader.js';
+import { Timer } from './timer.js';
+import { PlayerGameLogic } from './playerGameLogic.js';
+import { ShakingAnimation } from './shakingAnimation.js';
+import { DeathLayoutLoader } from './UIcode/DeathLayoutLoader.js';
+import { VictoryLayoutLoader } from './UIcode/VictoryLayoutLoader.js';
+import { StartLayoutLoader } from './UIcode/StartLayoutLoader.js';
 
-import { transformMesh } from '../engine/core.js';
-import { RayCast } from '../engine/core/RayCast.js';
-import { Physics } from '../engine/Physics.js';
-import { vec3 } from '../../lib/gl-matrix-module.js';
-
-const canvas = document.querySelector('canvas');
+const canvas = document.getElementById('webgpuCanvas');
 const renderer = new Renderer(canvas);
 await renderer.initialize();
 
 const loader = new GLTFLoader();
-await loader.load('../../res/scene/test4.gltf');
+await loader.load('../../res/scene/mainScene.gltf');
 
 const scene = loader.loadScene(loader.defaultScene);
-// console.log(scene)
-
 const camera = loader.loadNode('Camera');
+
+//console.log(scene)
+
+const pauseCheck = new Pause(canvas);
+let globalTimer = new Timer();
+
 camera.addComponent(new FirstPersonController(camera, canvas));
 camera.isDynamic = true;
 camera.aabb = {
-    min: [-0.4, -0.2, -0.2],
-    max: [0.4, 0.2, 0.2],
+    min: [-0.4, -1.9, -0.4],
+    max: [0.4, 0.6, 0.4],
 };
 
+var isStart = true;
+
+// Collision and physics in the scene
 const physics = new Physics(scene);
-
-const raysCast = new RayCast();
-
-const light = new Node();
-light.addComponent(new Transform({
-    translation: [0.4,-0.8,0],
-}));
-light.addComponent(new Light({
-    domElement: canvas,
-}));
-camera.addChild(light);
-
-await initScene(scene, camera);
-
-const fov = Math.PI / 4;
-const canWidth = canvas.width;
-const canHeight = canvas.height;
-
 scene.traverse(node => {
     const model = node.getComponentOfType(Model);
     if (!model) {
@@ -78,77 +76,135 @@ scene.traverse(node => {
 
     const boxes = model.primitives.map(primitive => calculateAxisAlignedBoundingBox(primitive.mesh));
     node.aabb = mergeAxisAlignedBoundingBoxes(boxes);
-
-    // console.log(node.aabb);
+    
     node.isStatic = true;
 });
 
-var isRemoved = false;
+
+// Light - spotlight
+const light = new Node();
+
+light.addComponent(new Transform({
+    translation: [0.4,-0.9,0],
+}));
+light.addComponent(new Light({
+    domElement: canvas,
+    node: light,
+    timer: globalTimer,
+}));
+camera.addChild(light);
+
+camera.addComponent(new PlayerGameLogic({node: camera, light: light ,timer: globalTimer, domElement: canvas, scene: scene}));
+camera.addComponent(new ShakingAnimation({node: camera, timer: globalTimer}));
+
+//init audio components
+const AudioContext = window.AudioContext || window.webkitAudioContext;
+const audioCtx = new AudioContext();
+
+await initScene(scene, audioCtx, camera, light, globalTimer, canvas.ownerDocument, pauseCheck);
+
+
+//initialize all 2D components of game
+const canvas2d = document.getElementById("2dCanvas")
+canvas2d.width = window.innerWidth;
+canvas2d.height = window.innerHeight;
+const uiLayoutLoader = new UILayoutLoader(canvas2d, camera.getComponentOfType(PlayerGameLogic), globalTimer);
+const uiLayout = await uiLayoutLoader.getLayout();
+const pauseLayoutLoader = new PauseLayoutLoader(canvas2d);
+const pauseLayout = await pauseLayoutLoader.getLayout();
+const deathLayoutLoader = new DeathLayoutLoader(canvas2d, globalTimer);
+const deathLayout = await deathLayoutLoader.getLayout();
+const victoryLayoutLoader = new VictoryLayoutLoader(canvas2d, globalTimer);
+const victoryLayout = await victoryLayoutLoader.getLayout();
+const startLayoutLoader = new StartLayoutLoader(canvas2d);
+const startLayout = await startLayoutLoader.getLayout();
+const uiRenderer = new UIRenderer(canvas2d);
+uiRenderer.init();
+
+//set timer before first loop
+globalTimer.update();
 
 function update(t, dt) {
-    var posVec = renderer.getCameraPosition(camera);
-    var dirVec = renderer.getCameraViewDirection(camera);
 
-    var rays = raysCast.generateRays(canWidth, canHeight, fov, dirVec, posVec);
-    // console.log(rays[0]);
+    globalTimer.update();
 
-    const nodes = scene.linearize();
-    var closestNode = null;
-    var minDist = Infinity;
+    if(camera.getComponentOfType(PlayerGameLogic).won){
+        for(const element of victoryLayout){
+            element?.update();
+        }
+        return;
+    }
 
-    for (const node of nodes) {
-        if (node.mesh && node.transformationMatrix) {
-            transformMesh(node.mesh, node.transformationMatrix);
-            if (node.mesh.vertices && node.mesh.vertices.length > 0) {
-                var pointOfIntersection = raysCast.rayIntersectsObjects(rays, node);
-                if (!isNaN(pointOfIntersection[0]) && pointOfIntersection != false) {  
-                    var vector = vec3.subtract(vec3.create(), posVec, pointOfIntersection);
+    if(camera.getComponentOfType(PlayerGameLogic).dead){
+        if (audioCtx.state === "running") {
+            audioCtx.suspend();
+        }
+        for(const element of deathLayout){
+            element?.update();
+        }
+        return;
+    }
 
-                    if (Math.sign(vector[0]) == Math.sign(dirVec[0]) && Math.sign(vector[1]) == Math.sign(dirVec[1]) && Math.sign(vector[2]) == Math.sign(dirVec[2])) {
-                        var lenVec = vec3.dist(posVec, pointOfIntersection);
-                        if ((lenVec < minDist) && (node.getComponentOfType(Camera) == null) && (node.getComponentOfType(Light) == null)) {
-                            minDist = lenVec;
-                            console.log(node);
-                            closestNode = node;
-                        }
-                    }
-                } 
-            }
+    if(pauseCheck.paused){
+        if (audioCtx.state === "running") {
+            audioCtx.suspend();
+        }
+        return;
+    }
+    else {
+        if (audioCtx.state === "suspended") {
+            audioCtx.resume()
         }
     }
-    // console.log(closestNode);
 
-    if (closestNode != null && !isRemoved) {
-        //console.log(node);
-        // console.log(scene.children);
-        document.addEventListener('keydown', e => {
-            if (e.code == "KeyE") {
-                console.log(closestNode);
-                isRemoved = true;
-                loader.removeObjectFromScene(scene, closestNode.name);
-                renderer.removeNodeFromGpuObjects(closestNode);
-                renderer.render(scene, camera, light);
-                //console.log(scene.children);
-            }
-        });
-    }
 
-    scene.traverse(node => {        
+    scene.traverse(node => {
         for (const component of node.components) {
             component.update?.(t, dt);
         }
     });
+
     physics.update(t, dt);
+
+    for(const element of uiLayout){
+        element?.update();
+    }
 }
 
 
 function render() {
-    renderer.render(scene, camera, light);
+    if(camera.getComponentOfType(PlayerGameLogic).won){
+        uiRenderer.render(victoryLayout);
+        return;
+    }
+
+    if(camera.getComponentOfType(PlayerGameLogic).dead){
+        uiRenderer.render(deathLayout);
+        return;
+    }
+
+    if(!pauseCheck.paused){
+        isStart = false;
+        renderer.render(scene, camera, light);
+        uiRenderer.render(uiLayout);
+    }
+    else{
+        if (isStart) {
+            uiRenderer.render(startLayout);
+        } else {
+            uiRenderer.render(pauseLayout);
+        }
+    }
 }
 
 function resize({ displaySize: { width, height }}) {
     camera.getComponentOfType(Camera).aspect = width / height;
 }
+
+window.addEventListener("resize", (event) => {
+    canvas2d.width = window.innerWidth;
+    canvas2d.height = window.innerHeight;
+});
 
 new ResizeSystem({ canvas, resize }).start();
 new UpdateSystem({ update, render }).start();

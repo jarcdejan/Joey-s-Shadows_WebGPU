@@ -112,13 +112,12 @@ export class Renderer extends BaseRenderer {
 
     constructor(canvas) {
         super(canvas);
-        this.perFragment = true;
     }
 
     async initialize() {
         await super.initialize();
 
-        const codeShadowDepth = await fetch('./src/project_code/shadowDepth.wgsl').then(response => response.text());
+        const codeShadowDepth = await fetch('./src/project_code/shaders/shadowDepth.wgsl').then(response => response.text());
         const moduleShadowDepth = this.device.createShaderModule({ code: codeShadowDepth });
 
         this.lightBindGroupLayout = this.device.createBindGroupLayout(lightBindGroupLayout);
@@ -152,7 +151,7 @@ export class Renderer extends BaseRenderer {
         this.shadowDepthTextureView = this.shadowDepthTexture.createView()
         this.shadowSampler = this.device.createSampler({ compare: 'less' })
 
-        const codeRender = await fetch('./src/project_code/renderShader.wgsl').then(response => response.text());
+        const codeRender = await fetch('./src/project_code/shaders/renderShader.wgsl').then(response => response.text());
         const moduleRender = this.device.createShaderModule({ code: codeRender });
 
         this.cameraBindGroupLayout = this.device.createBindGroupLayout(cameraBindGroupLayout);
@@ -199,11 +198,6 @@ export class Renderer extends BaseRenderer {
             size: [this.canvas.width, this.canvas.height],
             usage: GPUTextureUsage.RENDER_ATTACHMENT,
         });
-    }
-
-    removeNodeFromGpuObjects(node) {
-        this.gpuObjects.delete(node.mesh);
-        this.gpuObjects.delete(node);
     }
 
     prepareNode(node) {
@@ -363,6 +357,9 @@ export class Renderer extends BaseRenderer {
         const viewMatrix = getGlobalViewMatrix(camera);
         const projectionMatrix = getProjectionMatrix(camera);
         const cameraPosition = mat4.getTranslation(vec3.create(), getGlobalModelMatrix(camera));
+
+        //console.log(cameraPosition);
+
         const { cameraUniformBuffer, cameraBindGroup } = this.prepareCamera(cameraComponent);
         this.device.queue.writeBuffer(cameraUniformBuffer, 0, viewMatrix);
         this.device.queue.writeBuffer(cameraUniformBuffer, 64, projectionMatrix);
@@ -420,16 +417,6 @@ export class Renderer extends BaseRenderer {
         for (const child of node.children) {
             this.renderNode_shadow(child, modelMatrix);
         }
-    }
-
-    getCameraPosition(camera) {
-        const cameraPos = mat4.getTranslation(vec3.create(), getLocalModelMatrix(camera));
-        return cameraPos;
-    }
-
-    getCameraViewDirection(camera) {
-        const cameraDir = getGlobalRotation(camera);
-        return cameraDir;
     }
 
     renderModel(model) {

@@ -456,10 +456,12 @@ export class GLTFLoader {
 
         const node = new Node(nameOrIndex);
 
-        const transformComponent = new Transform(gltfSpec);
-        node.addComponent(transformComponent);
+        if(gltfSpec.name !== undefined)
+            node.name = gltfSpec.name
+        if(gltfSpec.mesh !== undefined)
+            node.mesh = gltfSpec.mesh
 
-        node.transformationMatrix = transformComponent.calculateTransformationMatrix();
+        node.addComponent(new Transform(gltfSpec));
 
         if (gltfSpec.children) {
             for (const childIndex of gltfSpec.children) {
