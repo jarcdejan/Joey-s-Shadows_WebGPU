@@ -450,7 +450,7 @@ export async function initScene(scene, audioCtx, camera, light, timer, document,
         timer: timer,
         audioBuffer: audioBufferAmbient1,
         minCooldown: 20 * 1000,
-        maxCooldown: 120 * 1000,
+        maxCooldown: 250 * 1000,
         gain: 0.5,
     }));
     scene.addChild(ambientSoundNode1);
@@ -468,7 +468,7 @@ export async function initScene(scene, audioCtx, camera, light, timer, document,
         timer: timer,
         audioBuffer: audioBufferAmbient2,
         minCooldown: 30 * 1000,
-        maxCooldown: 240 * 1000,
+        maxCooldown: 320 * 1000,
         gain: 0.2,
     }));
     scene.addChild(ambientSoundNode2);
@@ -486,8 +486,8 @@ export async function initScene(scene, audioCtx, camera, light, timer, document,
         timer: timer,
         audioBuffer: audioBufferAmbient3,
         minCooldown: 60 * 1000,
-        maxCooldown: 360 * 1000,
-        gain: 1,
+        maxCooldown: 400 * 1000,
+        gain: 0.6,
     }));
     scene.addChild(ambientSoundNode3);
 
@@ -504,7 +504,7 @@ export async function initScene(scene, audioCtx, camera, light, timer, document,
         timer: timer,
         audioBuffer: audioBufferAmbient4,
         minCooldown: 40 * 1000,
-        maxCooldown: 220 * 1000,
+        maxCooldown: 320 * 1000,
         gain: 0.3,
     }));
     scene.addChild(ambientSoundNode4);
@@ -522,7 +522,7 @@ export async function initScene(scene, audioCtx, camera, light, timer, document,
         timer: timer,
         audioBuffer: audioBufferAmbient5,
         minCooldown: 30 * 1000,
-        maxCooldown: 280 * 1000,
+        maxCooldown: 310 * 1000,
         gain: 0.3,
     }));
     scene.addChild(ambientSoundNode5);

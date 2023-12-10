@@ -27,4 +27,8 @@ export class Transform {
         mat4.getScaling(this.scale, matrix);
     }
 
+    calculateTransformationMatrix() {
+        return this.matrix;
+    }
+
 }

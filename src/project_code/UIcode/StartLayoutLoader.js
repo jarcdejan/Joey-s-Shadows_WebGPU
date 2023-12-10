@@ -1,6 +1,6 @@
 import { ImageLoader } from '../../engine/loaders/ImageLoader.js'
 
-export class PauseLayoutLoader{
+export class StartLayoutLoader{
 
     constructor(canvas) {
         this.canvas = canvas;
@@ -8,7 +8,7 @@ export class PauseLayoutLoader{
 
     async getLayout() {
         const layout = [
-            new PauseScreen({canvas: this.canvas})
+            new StartScreen({canvas: this.canvas})
         ]
 
         for(const element of layout){
@@ -19,11 +19,11 @@ export class PauseLayoutLoader{
     }
 }
 
-class PauseScreen {
+class StartScreen {
 
     constructor({
         canvas,
-        imageUrl = "../../res/UI/instructions_1.jpg",
+        imageUrl = "../../res/UI/start2.jpg",
 
     }) {
         this.imageUrl = imageUrl;

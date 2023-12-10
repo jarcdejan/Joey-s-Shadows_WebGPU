@@ -48,7 +48,7 @@ export function getGlobalRotation(node) {
         return quat.multiply(quat.create(), parentRotation, localRotation);
     } else {
         const transform = node.getComponentOfType(Transform);
-        if(transform){
+        if (transform) {
             return transform.rotation;
         }
         return quat.create();

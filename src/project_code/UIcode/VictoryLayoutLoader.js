@@ -25,17 +25,20 @@ class VictoryScreen {
     constructor({
         canvas,
         timer,
-        text = "YOU ESCAPED",
+        url = "../../../res/UI/winScreen.png",
         audioSrc = '../../../res/sounds/musicBox.mp3',
 
     }) {
         this.canvas = canvas;
         this.timer = timer;
-        this.text = text;
+        this.url = url;
         this.audioSrc = audioSrc;
     }
 
     async init() {
+        const imageLoader = new ImageLoader();
+
+        this.image = await imageLoader.load(this.url)
         this.keepTextFor = 5000;
         this.reduceOpacityFor = 0.001;
         this.reduceOpacityEvery = 10;
@@ -80,18 +83,6 @@ class VictoryScreen {
     }
 
     render(context) {
-        context.fillStyle = "black";
-        context.fillRect(0 ,0 ,this.canvas.width, this.canvas.height)
-
-        context.fillStyle = "aqua";
-        context.font = "200px arial";
-        context.globalAlpha = this.alpha;
-
-        const textWidth = context.measureText(this.text).width;
-        const textHeight = 100;
-
-        context.fillText(this.text, (this.canvas.width / 2 - textWidth / 2), (this.canvas.height / 2 - textHeight / 2));
-
-        context.globalAlpha = 1;
+        context.drawImage(this.image, 0, 0, this.image.width, this.image.height, 0, 0, this.canvas.width, this.canvas.height);
     }
 }
