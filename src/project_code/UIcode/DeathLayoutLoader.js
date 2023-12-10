@@ -25,17 +25,20 @@ class DeathScreen {
     constructor({
         canvas,
         timer,
-        text = "YOU DIED",
+        url = "../../../res/UI/gameOverScreen.png",
         audioSrc = '../../../res/sounds/piano.mp3',
 
     }) {
         this.canvas = canvas;
         this.timer = timer;
-        this.text = text;
+        this.url = url;
         this.audioSrc = audioSrc;
     }
 
     async init() {
+        const imageLoader = new ImageLoader();
+
+        this.image = await imageLoader.load(this.url)
         this.keepTextFor = 3000;
         this.reduceOpacityFor = 0.002;
         this.reduceOpacityEvery = 10;
@@ -81,18 +84,6 @@ class DeathScreen {
     }
 
     render(context) {
-        context.fillStyle = "black";
-        context.fillRect(0 ,0 ,this.canvas.width, this.canvas.height)
-
-        context.fillStyle = "red";
-        context.font = "200px arial";
-        context.globalAlpha = this.alpha;
-
-        const textWidth = context.measureText(this.text).width;
-        const textHeight = 100;
-
-        context.fillText(this.text, (this.canvas.width / 2 - textWidth / 2), (this.canvas.height / 2 - textHeight / 2));
-
-        context.globalAlpha = 1;
+        context.drawImage(this.image, 0, 0, this.image.width, this.image.height, 0, 0, this.canvas.width, this.canvas.height);
     }
 }

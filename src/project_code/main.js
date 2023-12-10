@@ -40,6 +40,7 @@ import { PlayerGameLogic } from './playerGameLogic.js';
 import { ShakingAnimation } from './shakingAnimation.js';
 import { DeathLayoutLoader } from './UIcode/DeathLayoutLoader.js';
 import { VictoryLayoutLoader } from './UIcode/VictoryLayoutLoader.js';
+import { StartLayoutLoader } from './UIcode/StartLayoutLoader.js';
 
 const canvas = document.getElementById('webgpuCanvas');
 const renderer = new Renderer(canvas);
@@ -62,6 +63,8 @@ camera.aabb = {
     min: [-0.4, -1.9, -0.4],
     max: [0.4, 0.6, 0.4],
 };
+
+var isStart = true;
 
 // Collision and physics in the scene
 const physics = new Physics(scene);
@@ -113,6 +116,8 @@ const deathLayoutLoader = new DeathLayoutLoader(canvas2d, globalTimer);
 const deathLayout = await deathLayoutLoader.getLayout();
 const victoryLayoutLoader = new VictoryLayoutLoader(canvas2d, globalTimer);
 const victoryLayout = await victoryLayoutLoader.getLayout();
+const startLayoutLoader = new StartLayoutLoader(canvas2d);
+const startLayout = await startLayoutLoader.getLayout();
 const uiRenderer = new UIRenderer(canvas2d);
 uiRenderer.init();
 
@@ -178,11 +183,16 @@ function render() {
     }
 
     if(!pauseCheck.paused){
+        isStart = false;
         renderer.render(scene, camera, light);
         uiRenderer.render(uiLayout);
     }
     else{
-        uiRenderer.render(pauseLayout);
+        if (isStart) {
+            uiRenderer.render(startLayout);
+        } else {
+            uiRenderer.render(pauseLayout);
+        }
     }
 }
 
